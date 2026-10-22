@@ -8,6 +8,7 @@ import {
   cmsPath,
   portalGroups,
   resourcesInGroup,
+  type PortalGroup,
   type ResourceIcon,
 } from "@/src/lib/portal/resources";
 
@@ -147,6 +148,23 @@ export function PortalSidebar() {
 }
 
 /**
+ * The screens that are not a collection but belong to a group.
+ *
+ * The content overview shows every record the public website shows, whatever
+ * collection it comes from — it cannot sit in one collection, so it sits with
+ * the group the website belongs to.
+ */
+const extraItems: Partial<Record<PortalGroup, NavItem[]>> = {
+  website: [
+    {
+      label: "All content",
+      href: "/portal/admin/content",
+      icon: "document",
+    },
+  ],
+};
+
+/**
  * The administration navigation.
  *
  * One link for every collection, grouped the way the resources are grouped.
@@ -166,11 +184,14 @@ function AdminNav({ pathname }: { pathname: string }) {
       <NavLink item={overview} pathname={pathname} />
 
       {portalGroups.map((group) => {
-        const items: NavItem[] = resourcesInGroup(group.key).map((resource) => ({
-          label: resource.title,
-          href: cmsPath(resource.key),
-          icon: resource.icon,
-        }));
+        const items: NavItem[] = [
+          ...(extraItems[group.key] ?? []),
+          ...resourcesInGroup(group.key).map((resource) => ({
+            label: resource.title,
+            href: cmsPath(resource.key),
+            icon: resource.icon,
+          })),
+        ];
 
         if (items.length === 0) return null;
 

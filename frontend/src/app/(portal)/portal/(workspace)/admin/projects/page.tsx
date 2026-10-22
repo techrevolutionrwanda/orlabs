@@ -1,25 +1,11 @@
-import type { Metadata } from "next";
+import { permanentRedirect } from "next/navigation";
 
-import { AdminProjects } from "@/src/components/portal/AdminProjects";
-import { PortalPageHeader } from "@/src/components/portal/PortalPageHeader";
-import { RevealController } from "@/src/components/site/RevealController";
-
-export const metadata: Metadata = {
-  title: "Projects — OrLabs portal",
-  description: "The delivery projects of the OrLabs portal.",
-  robots: { index: false, follow: false },
-};
-
+/**
+ * The old address of the projects screen.
+ *
+ * The projects are one collection among many, and every collection has the
+ * same screen, so the old address sends the visitor to the new one.
+ */
 export default function AdminProjectsPage() {
-  return (
-    <>
-      <RevealController />
-      <PortalPageHeader
-        eyebrow="Administration"
-        title="Projects"
-        lead="Every engagement, the people on it and how far along it is."
-      />
-      <AdminProjects />
-    </>
-  );
+  permanentRedirect("/portal/admin/delivery/projects");
 }

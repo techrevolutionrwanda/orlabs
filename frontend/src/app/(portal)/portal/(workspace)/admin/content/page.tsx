@@ -6,7 +6,8 @@ import { RevealController } from "@/src/components/site/RevealController";
 
 export const metadata: Metadata = {
   title: "Content — OrLabs portal",
-  description: "The public pages of the website and where each one stands.",
+  description:
+    "Every record the public website shows, and where each one stands.",
   robots: { index: false, follow: false },
 };
 
@@ -15,9 +16,9 @@ export default function AdminContentPage() {
     <>
       <RevealController />
       <PortalPageHeader
-        eyebrow="Administration"
-        title="Content"
-        lead="The pages of the public website, who looks after them and where they stand."
+        eyebrow="Website"
+        title="All content"
+        lead="Every record the public website shows, and whether it is published. Open one to change it."
       />
       <AdminContent />
     </>
