@@ -1,8 +1,6 @@
 "use client";
 
-import Link from "next/link";
-
-import { cmsPath, type ResourceKey } from "@/src/lib/portal/resources";
+import type { ResourceKey } from "@/src/lib/portal/resources";
 
 import { StatusChip } from "./StatusChip";
 
@@ -52,15 +50,6 @@ export function ContentList({ content }: { content: WebsiteContentRow[] }) {
 
           <div className="flex flex-wrap items-center gap-4">
             <StatusChip value={entry.state} />
-            <Link
-              href={cmsPath(entry.key, entry.id)}
-              className="link-arrow text-[0.875rem] text-ink-muted no-underline"
-            >
-              Edit
-              <span className="motion-arrow" aria-hidden="true">
-                →
-              </span>
-            </Link>
           </div>
         </li>
       ))}
