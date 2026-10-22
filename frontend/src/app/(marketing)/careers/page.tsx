@@ -88,14 +88,13 @@ export default function CareersPage() {
           />
 
           <ul
-            data-reveal
-            style={{ "--reveal-delay": "120ms" } as React.CSSProperties}
+            data-reveal-group
             className="grid list-none grid-cols-1 gap-5 p-0 sm:grid-cols-2 lg:grid-cols-3"
           >
             {culture.map((item) => (
               <li
                 key={item.title}
-                className="grid content-start gap-2.5 rounded-card border border-border bg-surface p-7"
+                className="motion-lift grid content-start gap-2.5 rounded-card border border-border bg-surface p-7"
               >
                 <h3 className="text-h3 font-semibold">{item.title}</h3>
                 <p className="text-[0.9375rem] text-ink-muted">{item.body}</p>
@@ -115,14 +114,13 @@ export default function CareersPage() {
           />
 
           <ul
-            data-reveal
-            style={{ "--reveal-delay": "120ms" } as React.CSSProperties}
+            data-reveal-group
             className="grid list-none grid-cols-1 gap-5 p-0 lg:grid-cols-3"
           >
             {roles.map((role, index) => (
               <li
                 key={index}
-                className="grid content-start gap-2.5 rounded-card border border-navy-line bg-navy-soft p-7"
+                className="motion-lift motion-lift-dark grid content-start gap-2.5 rounded-card border border-navy-line bg-navy-soft p-7"
               >
                 <h3 className="text-h3 font-semibold text-white">{role.title}</h3>
                 <p className="text-[0.875rem] font-semibold uppercase tracking-[0.12em] text-gold">
@@ -144,14 +142,13 @@ export default function CareersPage() {
           />
 
           <ol
-            data-reveal
-            style={{ "--reveal-delay": "120ms" } as React.CSSProperties}
+            data-reveal-group
             className="grid list-none grid-cols-1 gap-5 p-0 lg:grid-cols-3"
           >
             {steps.map((step, index) => (
               <li
                 key={step.title}
-                className="grid content-start gap-2.5 rounded-card border border-border bg-surface p-7"
+                className="motion-lift grid content-start gap-2.5 rounded-card border border-border bg-surface p-7"
               >
                 <span className="font-display text-[0.8125rem] font-bold tracking-[0.16em] text-gold">
                   {String(index + 1).padStart(2, "0")}

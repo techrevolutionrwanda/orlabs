@@ -4,7 +4,7 @@ export function Work() {
       <div className="container-page grid gap-6 lg:grid-cols-[2fr_1fr]">
         <article
           data-reveal
-          className="grid content-start gap-4 rounded-[20px] border border-border bg-surface p-9"
+          className="motion-lift grid content-start gap-4 rounded-[20px] border border-border bg-surface p-9"
         >
           <p className="eyebrow">Case study</p>
           <div className="flex aspect-[16/7] items-center justify-center rounded-[14px] border border-dashed border-[#c3cad5] text-sm text-ink-subtle">

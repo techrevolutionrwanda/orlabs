@@ -17,19 +17,18 @@ export function Services() {
             </h2>
           </div>
           <Link className="link-arrow text-navy" href="/services">
-            Talk to an engineer →
+            Talk to an engineer <span className="motion-arrow" aria-hidden="true">→</span>
           </Link>
         </div>
 
         <ul
-          data-reveal
-          style={{ "--reveal-delay": "120ms" } as React.CSSProperties}
+          data-reveal-group
           className="grid list-none grid-cols-1 gap-5 p-0 sm:grid-cols-2 lg:grid-cols-3"
         >
           {services.map((service) => (
             <li
               key={service.slug}
-              className="grid content-start gap-3.5 rounded-card border border-border bg-surface p-7 transition-[border-color,box-shadow] duration-150 hover:border-border-strong hover:shadow-[0_8px_24px_rgba(11,31,58,0.06)]"
+              className="motion-lift grid content-start gap-3.5 rounded-card border border-border bg-surface p-7"
             >
               <span className="grid h-12 w-12 place-items-center rounded-xl bg-navy text-gold">
                 {serviceIcons[service.slug]}

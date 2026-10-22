@@ -52,7 +52,14 @@ export function CtaForm() {
           type="submit"
           disabled={status === "submitting"}
         >
-          {status === "submitting" ? "Sending…" : "Start a project"}
+          {status === "submitting" ? (
+            <>
+              <span className="spinner" aria-hidden="true" />
+              <span className="ml-2.5">Sending…</span>
+            </>
+          ) : (
+            "Start a project"
+          )}
         </button>
       </div>
 
@@ -70,7 +77,7 @@ export function CtaForm() {
       <p
         className={`mt-3 min-h-5 text-sm ${
           status === "success" ? "text-gold" : "text-white"
-        }`}
+        } ${message ? "status-in" : ""}`}
         role="status"
         aria-live="polite"
       >

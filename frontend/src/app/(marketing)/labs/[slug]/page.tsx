@@ -71,11 +71,7 @@ export default async function LabPostPage({
             </Link>
           </div>
 
-          <div
-            data-reveal
-            style={{ "--reveal-delay": "120ms" } as React.CSSProperties}
-            className="grid content-start gap-6"
-          >
+          <div data-reveal-group className="grid content-start gap-6">
             {post.body.map((paragraph) => (
               <p key={paragraph} className="text-[1.0625rem] leading-[1.7] text-ink-muted">
                 {paragraph}

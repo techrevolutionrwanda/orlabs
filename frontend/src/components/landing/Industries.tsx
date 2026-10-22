@@ -29,8 +29,7 @@ export function Industries() {
         </div>
 
         <ul
-          data-reveal
-          style={{ "--reveal-delay": "120ms" } as React.CSSProperties}
+          data-reveal-group
           className="flex list-none flex-wrap gap-3 p-0"
         >
           {industries.map((industry) => (

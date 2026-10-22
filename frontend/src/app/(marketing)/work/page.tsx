@@ -31,13 +31,12 @@ export default function WorkPage() {
           />
 
           <ul
-            data-reveal
-            style={{ "--reveal-delay": "120ms" } as React.CSSProperties}
+            data-reveal-group
             className="grid list-none grid-cols-1 gap-6 p-0 lg:grid-cols-2"
           >
             {projects.map((project) => (
               <li key={project.slug}>
-                <article className="grid h-full content-start gap-4 rounded-card border border-border bg-surface p-8">
+                <article className="motion-lift grid h-full content-start gap-4 rounded-card border border-border bg-surface p-8">
                   <div className="flex aspect-[16/9] items-center justify-center rounded-[14px] border border-dashed border-[#c3cad5] text-sm text-ink-subtle">
                     [PROJECT SCREENSHOT]
                   </div>
@@ -54,7 +53,7 @@ export default function WorkPage() {
                     href={`/work/${project.slug}`}
                     className="link-arrow text-navy no-underline"
                   >
-                    Read the case study →
+                    Read the case study <span className="motion-arrow" aria-hidden="true">→</span>
                   </Link>
                 </article>
               </li>

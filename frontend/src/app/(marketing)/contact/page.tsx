@@ -35,11 +35,8 @@ export default function ContactPage() {
             </div>
           </div>
 
-          <div className="grid content-start gap-6">
-            <div
-              data-reveal
-              className="grid content-start gap-3.5 rounded-card border border-border bg-surface p-7"
-            >
+          <div data-reveal-group className="grid content-start gap-6">
+            <div className="motion-lift grid content-start gap-3.5 rounded-card border border-border bg-surface p-7">
               <h2 className="text-h3 font-semibold">OrLabs Tech Industries</h2>
               <address className="grid gap-3 text-[0.9375rem] not-italic text-ink-muted">
                 <span>
@@ -69,11 +66,7 @@ export default function ContactPage() {
               </p>
             </div>
 
-            <div
-              data-reveal
-              style={{ "--reveal-delay": "120ms" } as React.CSSProperties}
-              className="grid content-start gap-3.5 overflow-hidden rounded-card border border-border bg-surface"
-            >
+            <div className="motion-lift grid content-start gap-3.5 overflow-hidden rounded-card border border-border bg-surface">
               <iframe
                 className="h-[280px] w-full border-0"
                 src={mapEmbed}

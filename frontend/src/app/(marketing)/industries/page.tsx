@@ -29,14 +29,13 @@ export default function IndustriesPage() {
           />
 
           <ul
-            data-reveal
-            style={{ "--reveal-delay": "120ms" } as React.CSSProperties}
+            data-reveal-group
             className="grid list-none grid-cols-1 gap-5 p-0 lg:grid-cols-2"
           >
             {industries.map((industry) => (
               <li
                 key={industry.slug}
-                className="grid content-start gap-3 rounded-card border border-border bg-surface p-7"
+                className="motion-lift grid content-start gap-3 rounded-card border border-border bg-surface p-7"
               >
                 <h3 className="text-h3 font-semibold">{industry.name}</h3>
                 <p className="text-[0.9375rem] text-ink-muted">

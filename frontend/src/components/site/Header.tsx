@@ -55,7 +55,7 @@ export function Header() {
         <nav
           id="nav-menu"
           aria-label="Main"
-          className={`${open ? "block" : "hidden"} absolute inset-x-0 top-full border-b border-navy-line bg-navy px-6 pb-6 pt-2 min-[861px]:static min-[861px]:block min-[861px]:border-0 min-[861px]:bg-transparent min-[861px]:p-0`}
+          className={`${open ? "menu-open block" : "hidden"} absolute inset-x-0 top-full border-b border-navy-line bg-navy px-6 pb-6 pt-2 min-[861px]:static min-[861px]:block min-[861px]:border-0 min-[861px]:bg-transparent min-[861px]:p-0`}
         >
           <ul className="flex list-none flex-col items-stretch gap-1 p-0 min-[861px]:flex-row min-[861px]:items-center min-[861px]:gap-7">
             {links.map((link) => (
@@ -63,7 +63,7 @@ export function Header() {
                 <Link
                   href={link.href}
                   onClick={() => setOpen(false)}
-                  className="block py-3 text-[1.0625rem] font-medium text-[#DCE3EC] no-underline transition-colors hover:text-gold min-[861px]:py-0 min-[861px]:text-[0.9375rem]"
+                  className="nav-link block py-3 text-[1.0625rem] font-medium text-[#DCE3EC] no-underline transition-colors hover:text-gold min-[861px]:py-0 min-[861px]:text-[0.9375rem]"
                 >
                   {link.label}
                 </Link>

@@ -31,19 +31,15 @@ export default function LabsPage() {
           />
 
           <ul
-            data-reveal
-            style={{ "--reveal-delay": "120ms" } as React.CSSProperties}
+            data-reveal-group
             className="grid list-none grid-cols-1 gap-6 p-0"
           >
-            {labPosts.map((post, index) => (
+            {labPosts.map((post) => (
               <li
                 key={post.slug}
-                className="grid content-start gap-4 rounded-card border border-border bg-surface p-7"
+                className="motion-lift grid content-start gap-4 rounded-card border border-border bg-surface p-7"
               >
-                <div
-                  className="flex aspect-[16/7] items-center justify-center rounded-[18px] border border-dashed border-[#c3cad5] text-sm text-ink-subtle"
-                  style={{ "--reveal-delay": `${index * 120}ms` } as React.CSSProperties}
-                >
+                <div className="flex aspect-[16/7] items-center justify-center rounded-[18px] border border-dashed border-[#c3cad5] text-sm text-ink-subtle">
                   [LAB POST PREVIEW]
                 </div>
                 <p className="text-[0.8125rem] font-semibold uppercase tracking-[0.16em] text-teal-text">

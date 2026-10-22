@@ -32,14 +32,13 @@ export default function ServicesPage() {
           />
 
           <ul
-            data-reveal
-            style={{ "--reveal-delay": "120ms" } as React.CSSProperties}
+            data-reveal-group
             className="grid list-none grid-cols-1 gap-5 p-0 sm:grid-cols-2 lg:grid-cols-3"
           >
             {services.map((service) => (
               <li
                 key={service.slug}
-                className="grid content-start gap-3.5 rounded-card border border-border bg-surface p-7 transition-[border-color,box-shadow] duration-150 hover:border-border-strong hover:shadow-[0_8px_24px_rgba(11,31,58,0.06)]"
+                className="motion-lift grid content-start gap-3.5 rounded-card border border-border bg-surface p-7"
               >
                 <span className="grid h-12 w-12 place-items-center rounded-xl bg-navy text-gold">
                   {serviceIcons[service.slug]}
@@ -57,7 +56,7 @@ export default function ServicesPage() {
                   href={`/services/${service.slug}`}
                   className="link-arrow mt-1 text-navy no-underline"
                 >
-                  Learn more →
+                  Learn more <span className="motion-arrow" aria-hidden="true">→</span>
                 </Link>
               </li>
             ))}
@@ -75,15 +74,14 @@ export default function ServicesPage() {
           />
 
           <ol
-            data-reveal
-            style={{ "--reveal-delay": "120ms" } as React.CSSProperties}
+            data-reveal-group
             className="grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2 lg:grid-cols-5"
           >
             {["Discover", "Design", "Build", "Launch", "Support"].map(
               (step, index) => (
                 <li
                   key={step}
-                  className="grid content-start gap-2 rounded-card border border-navy-line bg-navy-soft p-6"
+                  className="motion-lift motion-lift-dark grid content-start gap-2 rounded-card border border-navy-line bg-navy-soft p-6"
                 >
                   <span className="font-display text-[0.8125rem] font-bold tracking-[0.16em] text-gold">
                     {String(index + 1).padStart(2, "0")}

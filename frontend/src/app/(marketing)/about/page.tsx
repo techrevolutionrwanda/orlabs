@@ -78,11 +78,11 @@ export default function AboutPage() {
             title="Why we are here, and where we are going."
           />
 
-          <div className="grid gap-5 lg:grid-cols-2">
-            <article
-              data-reveal
-              className="grid content-start gap-3.5 rounded-card border border-navy-line bg-navy-soft p-8"
-            >
+          <div
+            data-reveal-group
+            className="grid gap-5 lg:grid-cols-2"
+          >
+            <article className="motion-lift motion-lift-dark grid content-start gap-3.5 rounded-card border border-navy-line bg-navy-soft p-8">
               <p className="text-[0.8125rem] font-semibold uppercase tracking-[0.16em] text-gold">
                 Mission
               </p>
@@ -91,11 +91,7 @@ export default function AboutPage() {
                 and growth to organisations across Africa.
               </p>
             </article>
-            <article
-              data-reveal
-              style={{ "--reveal-delay": "120ms" } as React.CSSProperties}
-              className="grid content-start gap-3.5 rounded-card border border-navy-line bg-navy-soft p-8"
-            >
+            <article className="motion-lift motion-lift-dark grid content-start gap-3.5 rounded-card border border-navy-line bg-navy-soft p-8">
               <p className="text-[0.8125rem] font-semibold uppercase tracking-[0.16em] text-gold">
                 Vision
               </p>
@@ -118,14 +114,13 @@ export default function AboutPage() {
           />
 
           <ul
-            data-reveal
-            style={{ "--reveal-delay": "120ms" } as React.CSSProperties}
+            data-reveal-group
             className="grid list-none grid-cols-1 gap-5 p-0 sm:grid-cols-2 lg:grid-cols-3"
           >
             {values.map((value) => (
               <li
                 key={value.name}
-                className="grid content-start gap-2.5 rounded-card border border-border bg-surface p-7"
+                className="motion-lift grid content-start gap-2.5 rounded-card border border-border bg-surface p-7"
               >
                 <h3 className="text-h3 font-semibold">{value.name}</h3>
                 <p className="text-[0.9375rem] text-ink-muted">{value.body}</p>
@@ -144,14 +139,13 @@ export default function AboutPage() {
           />
 
           <ul
-            data-reveal
-            style={{ "--reveal-delay": "120ms" } as React.CSSProperties}
+            data-reveal-group
             className="grid list-none grid-cols-2 gap-5 p-0 lg:grid-cols-4"
           >
             {team.map((name, index) => (
               <li
                 key={index}
-                className="grid content-start gap-3 rounded-card border border-border bg-surface p-5"
+                className="motion-lift grid content-start gap-3 rounded-card border border-border bg-surface p-5"
               >
                 <span
                   aria-hidden="true"

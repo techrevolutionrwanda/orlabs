@@ -140,12 +140,19 @@ export function ContactForm() {
           type="submit"
           disabled={status === "submitting"}
         >
-          {status === "submitting" ? "Sending…" : "Send message"}
+          {status === "submitting" ? (
+            <>
+              <span className="spinner" aria-hidden="true" />
+              <span className="ml-2.5">Sending…</span>
+            </>
+          ) : (
+            "Send message"
+          )}
         </button>
         <p
           className={`min-h-5 text-sm ${
             status === "success" ? "text-teal-text" : "text-ink-muted"
-          }`}
+          } ${message ? "status-in" : ""}`}
           role="status"
           aria-live="polite"
         >

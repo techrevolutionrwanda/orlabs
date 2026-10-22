@@ -34,19 +34,18 @@ export function WhyOrLabs() {
             vendors.
           </p>
           <a className="link-arrow text-gold" href="#about">
-            Read our story →
+            Read our story <span className="motion-arrow" aria-hidden="true">→</span>
           </a>
         </div>
 
         <ul
-          data-reveal
-          style={{ "--reveal-delay": "120ms" } as React.CSSProperties}
+          data-reveal-group
           className="grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2"
         >
           {values.map((value) => (
             <li
               key={value.title}
-              className="grid content-start gap-2 rounded-2xl border border-navy-line p-[22px]"
+              className="motion-lift motion-lift-dark grid content-start gap-2 rounded-2xl border border-navy-line p-[22px]"
             >
               <span className="font-display text-lg font-semibold text-gold">
                 {value.title}

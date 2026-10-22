@@ -24,14 +24,13 @@ export function Process() {
         </div>
 
         <ol
-          data-reveal
-          style={{ "--reveal-delay": "120ms" } as React.CSSProperties}
+          data-reveal-group
           className="grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2 lg:grid-cols-5"
         >
           {steps.map((step, index) => (
             <li
               key={step.title}
-              className="grid content-start gap-2 border-t-[3px] border-gold pt-[18px]"
+              className="motion-lift grid content-start gap-2 border-t-[3px] border-gold pt-[18px] hover:border-t-gold"
             >
               <span className="font-display text-sm font-bold text-teal-text">
                 {String(index + 1).padStart(2, "0")}

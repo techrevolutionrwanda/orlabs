@@ -66,17 +66,15 @@ export default async function ProjectPage({
       </section>
 
       <section className="section bg-chip">
-        <div className="container-page grid gap-10 lg:grid-cols-3">
+        <div data-reveal-group className="container-page grid gap-10 lg:grid-cols-3">
           {[
             { label: "Problem", body: project.problem },
             { label: "Solution", body: project.solution },
             { label: "Result", body: project.outcome },
-          ].map((block, index) => (
+          ].map((block) => (
             <article
               key={block.label}
-              data-reveal
-              style={{ "--reveal-delay": `${index * 120}ms` } as React.CSSProperties}
-              className="grid content-start gap-3 rounded-card border border-border bg-surface p-7"
+              className="motion-lift grid content-start gap-3 rounded-card border border-border bg-surface p-7"
             >
               <p className="text-[0.8125rem] font-semibold uppercase tracking-[0.16em] text-teal-text">
                 {block.label}
@@ -94,8 +92,7 @@ export default async function ProjectPage({
             <h2 className="mt-3 text-h2">What it runs on.</h2>
           </div>
           <ul
-            data-reveal
-            style={{ "--reveal-delay": "120ms" } as React.CSSProperties}
+            data-reveal-group
             className="flex list-none flex-wrap gap-3 p-0"
           >
             {project.stack.map((item, index) => (

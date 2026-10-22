@@ -12,8 +12,7 @@ export function Clients() {
           Trusted by teams across Rwanda
         </p>
         <ul
-          data-reveal
-          style={{ "--reveal-delay": "120ms" } as React.CSSProperties}
+          data-reveal-group
           className="flex flex-wrap gap-4"
         >
           {Array.from({ length: 4 }).map((_, index) => (
