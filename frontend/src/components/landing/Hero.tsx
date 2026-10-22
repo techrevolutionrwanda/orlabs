@@ -44,7 +44,7 @@ export function Hero() {
         </div>
 
         <div className="rise-in" style={{ animationDelay: "0.34s" }}>
-          <div className="rounded-panel border border-navy-line/70 bg-navy-soft p-3 sm:p-5">
+          <div className="overflow-hidden rounded-panel border border-navy-line/70 bg-navy-soft p-3 sm:p-5">
             <HeroShowcase />
           </div>
         </div>

@@ -51,7 +51,10 @@
   h1,
   h2,
   h3 {
-    @apply font-display text-navy tracking-[-0.02em];
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--color-navy);
+    letter-spacing: -0.02em;
     line-height: 1.15;
   }
 
@@ -189,11 +192,11 @@
 }
 
 .screen-scroll-tablet {
-  animation: screen-scroll-tablet 46s ease-in-out infinite alternate-reverse;
+  animation: screen-scroll-tablet 46s ease-in-out -14s infinite alternate;
 }
 
 .screen-scroll-phone {
-  animation: screen-scroll-phone 28s ease-in-out infinite alternate;
+  animation: screen-scroll-phone 28s ease-in-out -6s infinite alternate;
 }
 
 .device-stage:hover .screen-scroll,

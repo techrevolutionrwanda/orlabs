@@ -10,7 +10,7 @@ export function HeroShowcase() {
       {/* Orbit + floor shadow */}
       <div
         aria-hidden="true"
-        className="orbit-spin absolute left-1/2 top-1/2 aspect-square w-[88%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-dashed border-navy-line/70"
+        className="orbit-spin absolute left-1/2 top-1/2 aspect-square w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-dashed border-navy-line/70"
       >
         <span className="absolute left-1/2 top-0 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold/80" />
         <span className="absolute bottom-[12%] right-[8%] h-1.5 w-1.5 rounded-full bg-teal/70" />
@@ -53,7 +53,7 @@ export function HeroShowcase() {
       </div>
 
       {/* Phone */}
-      <div className="absolute -left-[1%] bottom-[2%] z-30 w-[21%] -rotate-[8deg]">
+      <div className="absolute -left-[2%] bottom-[2%] z-30 w-[19%] -rotate-[8deg]">
         <div className="device-float-phone rounded-[12px] border border-[#2b4e7c] bg-[#0f2a4c] p-[7%] shadow-[0_24px_48px_rgba(0,0,0,0.45)]">
           <div className="relative aspect-[9/19] overflow-hidden rounded-[8px] bg-bg ring-1 ring-black/40">
             <MiniSite variant="phone" />
