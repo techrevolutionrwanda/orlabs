@@ -2,7 +2,7 @@ import { CtaForm } from "./CtaForm";
 
 export function Cta() {
   return (
-    <section className="pb-[clamp(4rem,8vw,6rem)]" id="contact">
+    <section className="scroll-mt-24 pb-[clamp(4rem,8vw,6rem)]" id="contact">
       <div className="container-page">
         <div
           data-reveal

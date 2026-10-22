@@ -80,6 +80,7 @@
 
   .section {
     @apply py-[clamp(4rem,8vw,6rem)];
+    scroll-margin-top: 6rem;
   }
 
   .eyebrow {
