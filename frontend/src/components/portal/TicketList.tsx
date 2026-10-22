@@ -37,16 +37,16 @@ export function TicketList({
       });
 
       const body = (await response.json()) as {
-        ticket?: PortalTicket;
+        record?: PortalTicket;
         error?: string;
       };
 
-      if (!response.ok || !body.ticket) {
+      if (!response.ok || !body.record) {
         throw new Error(body.error ?? "The change could not be saved.");
       }
 
       setItems((current) =>
-        current.map((ticket) => (ticket.id === id ? body.ticket! : ticket)),
+        current.map((ticket) => (ticket.id === id ? body.record! : ticket)),
       );
     } catch (failure) {
       setError(

@@ -13,7 +13,7 @@ import { usePortalData } from "./usePortalData";
  */
 export function AdminOverview() {
   const summary = usePortalData<PortalSummary>("/api/portal/summary");
-  const projects = usePortalData<{ projects: PortalProject[] }>(
+  const projects = usePortalData<{ records: PortalProject[] }>(
     "/api/portal/projects",
   );
 
@@ -36,7 +36,7 @@ export function AdminOverview() {
         <PortalResource state={projects} rows={2}>
           {(data) => (
             <ProjectList
-              projects={data.projects.filter(
+              projects={data.records.filter(
                 (project) =>
                   project.status !== "live" && project.status !== "paused",
               )}

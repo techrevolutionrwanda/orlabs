@@ -14,10 +14,10 @@ import { usePortalData } from "./usePortalData";
  */
 export function WorkerOverview() {
   const summary = usePortalData<PortalSummary>("/api/portal/summary");
-  const tasks = usePortalData<{ tasks: PortalTask[] }>(
+  const tasks = usePortalData<{ records: PortalTask[] }>(
     "/api/portal/tasks?mine=1",
   );
-  const tickets = usePortalData<{ tickets: PortalTicket[] }>(
+  const tickets = usePortalData<{ records: PortalTicket[] }>(
     "/api/portal/tickets",
   );
 
@@ -41,7 +41,7 @@ export function WorkerOverview() {
           {(data) => (
             <TaskList
               readOnly
-              tasks={data.tasks.filter((task) => task.status !== "done").slice(0, 4)}
+              tasks={data.records.filter((task) => task.status !== "done").slice(0, 4)}
             />
           )}
         </PortalResource>
@@ -56,7 +56,7 @@ export function WorkerOverview() {
           {(data) => (
             <TicketList
               readOnly
-              tickets={data.tickets
+              tickets={data.records
                 .filter((ticket) => ticket.status !== "resolved")
                 .slice(0, 3)}
             />

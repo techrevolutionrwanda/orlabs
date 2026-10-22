@@ -14,7 +14,7 @@ const filters = ["all", "planning", "building", "review", "live", "paused"];
  * Every project, with a filter for the state it is in.
  */
 export function AdminProjects() {
-  const projects = usePortalData<{ projects: PortalProject[] }>(
+  const projects = usePortalData<{ records: PortalProject[] }>(
     "/api/portal/projects",
   );
   const [filter, setFilter] = useState("all");
@@ -44,8 +44,8 @@ export function AdminProjects() {
           <ProjectList
             projects={
               filter === "all"
-                ? data.projects
-                : data.projects.filter((project) => project.status === filter)
+                ? data.records
+                : data.records.filter((project) => project.status === filter)
             }
           />
         )}

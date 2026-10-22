@@ -38,16 +38,16 @@ export function TaskList({
       });
 
       const body = (await response.json()) as {
-        task?: PortalTask;
+        record?: PortalTask;
         error?: string;
       };
 
-      if (!response.ok || !body.task) {
+      if (!response.ok || !body.record) {
         throw new Error(body.error ?? "The change could not be saved.");
       }
 
       setItems((current) =>
-        current.map((task) => (task.id === id ? body.task! : task)),
+        current.map((task) => (task.id === id ? body.record! : task)),
       );
     } catch (failure) {
       setError(

@@ -10,11 +10,11 @@ import { usePortalData } from "./usePortalData";
  * The people on the roster.
  */
 export function AdminTeam() {
-  const team = usePortalData<{ team: TeamMember[] }>("/api/portal/team");
+  const team = usePortalData<{ records: TeamMember[] }>("/api/portal/team");
 
   return (
     <PortalResource state={team} rows={3}>
-      {(data) => <TeamList team={data.team} />}
+      {(data) => <TeamList team={data.records} />}
     </PortalResource>
   );
 }

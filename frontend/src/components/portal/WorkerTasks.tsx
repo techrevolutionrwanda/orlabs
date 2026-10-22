@@ -10,13 +10,13 @@ import { usePortalData } from "./usePortalData";
  * The tasks of the person who is signed in.
  */
 export function WorkerTasks() {
-  const tasks = usePortalData<{ tasks: PortalTask[] }>(
+  const tasks = usePortalData<{ records: PortalTask[] }>(
     "/api/portal/tasks?mine=1",
   );
 
   return (
     <PortalResource state={tasks} rows={3}>
-      {(data) => <TaskList tasks={data.tasks} />}
+      {(data) => <TaskList tasks={data.records} />}
     </PortalResource>
   );
 }
