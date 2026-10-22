@@ -366,7 +366,12 @@ export const resources: Record<ResourceKey, ResourceDef> = {
       { name: "quote", label: "Quote", kind: "textarea" },
       { name: "quoteName", label: "Quote — name", kind: "text" },
       { name: "quoteRole", label: "Quote — role", kind: "text" },
-      { name: "imageUrl", label: "Cover image", kind: "image" },
+      {
+        name: "imageUrl",
+        label: "Cover image",
+        kind: "image",
+        help: "The address of the picture (https://…). The website shows a placeholder while there is none.",
+      },
       { name: "state", label: "State", kind: "select", required: true, options: publishOptions },
     ],
     columns: [
@@ -501,7 +506,12 @@ export const resources: Record<ResourceKey, ResourceDef> = {
       { name: "name", label: "Name", kind: "text", required: true },
       { name: "role", label: "Role", kind: "text", required: true },
       { name: "bio", label: "A sentence about them", kind: "textarea" },
-      { name: "photoUrl", label: "Portrait", kind: "image" },
+      {
+        name: "photoUrl",
+        label: "Portrait",
+        kind: "image",
+        help: "The address of the picture (https://…). The website shows a placeholder while there is none.",
+      },
       { name: "state", label: "State", kind: "select", required: true, options: publishOptions },
     ],
     columns: [
@@ -525,7 +535,12 @@ export const resources: Record<ResourceKey, ResourceDef> = {
     prefix: "cl",
     fields: [
       { name: "name", label: "Name", kind: "text", required: true, help: "Used as the alternative text of the logo." },
-      { name: "logoUrl", label: "Logo", kind: "image" },
+      {
+        name: "logoUrl",
+        label: "Logo",
+        kind: "image",
+        help: "The address of the picture (https://…). The website shows a placeholder while there is none.",
+      },
       { name: "websiteUrl", label: "Website", kind: "url", placeholder: "https://" },
       { name: "state", label: "State", kind: "select", required: true, options: publishOptions },
     ],

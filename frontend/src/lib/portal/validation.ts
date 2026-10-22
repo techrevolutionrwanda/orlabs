@@ -191,7 +191,7 @@ export function validateRecord(
         if (!isAllowedImage(value)) {
           errors.push({
             field: field.name,
-            message: "Upload an image, or write a full address.",
+            message: "Write the full address of the picture, starting with https://",
           });
           break;
         }

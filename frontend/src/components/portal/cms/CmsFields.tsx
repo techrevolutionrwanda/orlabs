@@ -171,6 +171,10 @@ function CmsField({
             />
 
             {value.startsWith("http") || value.startsWith("/api/portal/uploads/") ? (
+              // A plain picture on purpose: the preview shows whatever the
+              // administrator pasted, and `next/image` would refuse an
+              // address that is not on the allowlist.
+              // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={value}
                 alt=""
