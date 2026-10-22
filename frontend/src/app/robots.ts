@@ -10,6 +10,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
+      // The portal is for the team only.
+      disallow: "/portal",
     },
     sitemap: `${baseUrl}/sitemap.xml`,
   };

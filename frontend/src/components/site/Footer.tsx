@@ -7,6 +7,7 @@ const company = [
   { label: "Work", href: "/#work" },
   { label: "Labs & insights", href: "/labs" },
   { label: "Careers — Join the Lab", href: "/careers" },
+  { label: "Staff portal", href: "/portal" },
 ];
 
 const services = [
