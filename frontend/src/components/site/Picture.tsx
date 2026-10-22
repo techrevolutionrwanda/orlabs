@@ -14,12 +14,14 @@ export function Picture({
   alt,
   placeholder,
   className = "",
+  placeholderClass = "text-sm",
   sizes = "(min-width: 1024px) 50vw, 100vw",
 }: {
   src: string;
   alt: string;
   placeholder: string;
   className?: string;
+  placeholderClass?: string;
   sizes?: string;
 }) {
   const address = src.trim();
@@ -28,7 +30,7 @@ export function Picture({
   if (!usable) {
     return (
       <div
-        className={`flex items-center justify-center rounded-[14px] border border-dashed border-[#c3cad5] text-sm text-ink-subtle ${className}`}
+        className={`flex items-center justify-center rounded-[14px] border border-dashed border-[#c3cad5] text-ink-subtle ${placeholderClass} ${className}`}
       >
         {placeholder}
       </div>

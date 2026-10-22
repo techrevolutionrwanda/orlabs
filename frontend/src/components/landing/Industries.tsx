@@ -1,16 +1,9 @@
-const industries = [
-  "Finance & microfinance",
-  "Health",
-  "Agriculture",
-  "Construction & real estate",
-  "Logistics & transport",
-  "Education",
-  "Hospitality & tourism",
-  "Government & NGOs",
-  "Retail & e-commerce",
-];
+import { siteIndustries } from "@/src/lib/site/content";
 
-export function Industries() {
+export async function Industries() {
+  // The industries come from the portal: only the published ones are shown.
+  const industries = await siteIndustries();
+
   return (
     <section
       className="section border-y border-border bg-surface"
@@ -34,10 +27,10 @@ export function Industries() {
         >
           {industries.map((industry) => (
             <li
-              key={industry}
+              key={industry.id}
               className="rounded-full bg-chip px-[18px] py-3 text-[0.9375rem] font-medium text-navy"
             >
-              {industry}
+              {industry.name}
             </li>
           ))}
         </ul>

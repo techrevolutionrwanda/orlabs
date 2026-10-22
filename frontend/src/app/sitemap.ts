@@ -1,14 +1,20 @@
 import type { MetadataRoute } from "next";
-import { labPosts } from "@/src/content/labs";
-import { projects } from "@/src/content/projects";
-import { services } from "@/src/content/services";
+import { siteLabNotes, siteServices, siteWork } from "@/src/lib/site/content";
 
 const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(
   /\/$/,
   "",
 );
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  // Only the published records have an address on the website, so only they
+  // belong in the map of the site.
+  const [services, work, notes] = await Promise.all([
+    siteServices(),
+    siteWork(),
+    siteLabNotes(),
+  ]);
+
   const staticRoutes = [
     { path: "", priority: 1 },
     { path: "/about", priority: 0.8 },
@@ -29,12 +35,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${baseUrl}/services/${service.slug}`,
       priority: 0.7,
     })),
-    ...projects.map((project) => ({
+    ...work.map((project) => ({
       url: `${baseUrl}/work/${project.slug}`,
       priority: 0.6,
     })),
-    ...labPosts.map((post) => ({
-      url: `${baseUrl}/labs/${post.slug}`,
+    ...notes.map((note) => ({
+      url: `${baseUrl}/labs/${note.slug}`,
       priority: 0.5,
     })),
   ];

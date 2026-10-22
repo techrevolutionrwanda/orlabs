@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ContactForm } from "@/src/components/site/ContactForm";
 import { PageHero } from "@/src/components/site/PageHero";
 import { RevealController } from "@/src/components/site/RevealController";
+import { siteContactChannels, siteServices } from "@/src/lib/site/content";
 
 export const metadata: Metadata = {
   title: "Contact — Talk to an engineer in Kigali | OrLabs",
@@ -15,7 +16,18 @@ const mapEmbed =
 const mapLink =
   "https://www.openstreetmap.org/?mlat=-1.9441&mlon=30.0619#map=13/30.0619/-1.9441";
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  // The details the page shows come from the portal, and the services in the
+  // form are the ones the studio offers.
+  const channels = await siteContactChannels();
+  const services = await siteServices();
+
+  const address = channels.find((channel) => channel.kind === "address");
+  const phone = channels.find(
+    (channel) => channel.kind === "phone" || channel.kind === "whatsapp",
+  );
+  const email = channels.find((channel) => channel.kind === "email");
+
   return (
     <main className="flex-1" id="main">
       <RevealController />
@@ -31,7 +43,12 @@ export default function ContactPage() {
             <p className="eyebrow">Send a message</p>
             <h2 className="mt-3 text-h2">Start the conversation.</h2>
             <div className="mt-8">
-              <ContactForm />
+              <ContactForm
+                services={services.map((service) => ({
+                  slug: service.slug,
+                  title: service.title,
+                }))}
+              />
             </div>
           </div>
 
@@ -39,31 +56,32 @@ export default function ContactPage() {
             <div className="motion-lift grid content-start gap-3.5 rounded-card border border-border bg-surface p-7">
               <h2 className="text-h3 font-semibold">OrLabs Tech Industries</h2>
               <address className="grid gap-3 text-[0.9375rem] not-italic text-ink-muted">
-                <span>
-                  [Street address]
-                  <br />
-                  Kigali, Rwanda
-                </span>
-                <span>
-                  <span className="font-semibold text-ink">Phone &amp; WhatsApp</span>
-                  <br />
-                  [PHONE / WHATSAPP]
-                </span>
-                <span>
-                  <span className="font-semibold text-ink">Email</span>
-                  <br />
-                  <a
-                    href="mailto:[EMAIL]"
-                    className="text-teal-text underline decoration-1 underline-offset-4"
-                  >
-                    [EMAIL]
-                  </a>
-                </span>
+                {address ? <span>{address.label}</span> : null}
+                {phone ? (
+                  <span>
+                    <span className="font-semibold text-ink">Phone &amp; WhatsApp</span>
+                    <br />
+                    {phone.label}
+                  </span>
+                ) : null}
+                {email ? (
+                  <span>
+                    <span className="font-semibold text-ink">Email</span>
+                    <br />
+                    <a
+                      href={email.href || `mailto:${email.value}`}
+                      className="text-teal-text underline decoration-1 underline-offset-4"
+                    >
+                      {email.label}
+                    </a>
+                  </span>
+                ) : null}
               </address>
-              <p className="text-[0.875rem] text-ink-subtle">
-                WhatsApp messages are welcome — [PHONE / WHATSAPP] to be
-                confirmed.
-              </p>
+              {phone ? (
+                <p className="text-[0.875rem] text-ink-subtle">
+                  WhatsApp messages are welcome.
+                </p>
+              ) : null}
             </div>
 
             <div className="motion-lift grid content-start gap-3.5 overflow-hidden rounded-card border border-border bg-surface">

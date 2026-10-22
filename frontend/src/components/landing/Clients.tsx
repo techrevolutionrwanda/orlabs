@@ -1,4 +1,10 @@
-export function Clients() {
+import { Picture } from "@/src/components/site/Picture";
+import { siteClients } from "@/src/lib/site/content";
+
+export async function Clients() {
+  // The logos come from the portal: only the published ones are shown.
+  const clients = await siteClients();
+
   return (
     <section
       className="border-b border-border bg-surface"
@@ -15,12 +21,16 @@ export function Clients() {
           data-reveal-group
           className="flex flex-wrap gap-4"
         >
-          {Array.from({ length: 4 }).map((_, index) => (
-            <li
-              key={index}
-              className="flex h-11 w-[132px] items-center justify-center rounded-[10px] border border-dashed border-[#c3cad5] text-xs text-ink-subtle"
-            >
-              [CLIENT LOGO]
+          {clients.map((client) => (
+            <li key={client.id} className="h-11 w-[132px]">
+              <Picture
+                src={client.logoUrl}
+                alt={client.name}
+                placeholder="[CLIENT LOGO]"
+                placeholderClass="text-[0.625rem]"
+                className="h-full w-full"
+                sizes="132px"
+              />
             </li>
           ))}
         </ul>

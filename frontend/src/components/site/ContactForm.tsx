@@ -2,14 +2,19 @@
 
 import { useState, type FormEvent } from "react";
 import { submitContactForm } from "@/src/lib/contact";
-import { services } from "@/src/content/services";
 
 type Status = "idle" | "submitting" | "success" | "error";
+
+/** A service the visitor can pick in the form. */
+export type ServiceOption = {
+  slug: string;
+  title: string;
+};
 
 const fieldClass =
   "min-h-[52px] w-full rounded-[12px] border border-border bg-surface px-4 font-[inherit] text-ink placeholder:text-ink-subtle transition-colors focus:border-border-strong";
 
-export function ContactForm() {
+export function ContactForm({ services }: { services: ServiceOption[] }) {
   const [status, setStatus] = useState<Status>("idle");
   const [message, setMessage] = useState("");
 

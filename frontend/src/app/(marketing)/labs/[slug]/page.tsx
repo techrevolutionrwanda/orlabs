@@ -4,10 +4,14 @@ import { notFound } from "next/navigation";
 import { CtaBand } from "@/src/components/site/CtaBand";
 import { PageHero } from "@/src/components/site/PageHero";
 import { RevealController } from "@/src/components/site/RevealController";
-import { getLabPost, labPosts } from "@/src/content/labs";
+import { siteLabNoteBySlug, siteLabNotes } from "@/src/lib/site/content";
 
-export function generateStaticParams() {
-  return labPosts.map((post) => ({ slug: post.slug }));
+export async function generateStaticParams() {
+  // The published notes are known when the site is built, so each one gets a
+  // page of its own.
+  const notes = await siteLabNotes();
+
+  return notes.map((note) => ({ slug: note.slug }));
 }
 
 // The page reads `params` while rendering, so a navigation into it is allowed
@@ -18,7 +22,7 @@ export async function generateMetadata({
   params,
 }: PageProps<"/labs/[slug]">): Promise<Metadata> {
   const { slug } = await params;
-  const post = getLabPost(slug);
+  const post = await siteLabNoteBySlug(slug);
 
   if (!post) {
     return { title: "Lab note not found | OrLabs" };
@@ -34,7 +38,7 @@ export default async function LabPostPage({
   params,
 }: PageProps<"/labs/[slug]">) {
   const { slug } = await params;
-  const post = getLabPost(slug);
+  const post = await siteLabNoteBySlug(slug);
 
   if (!post) {
     notFound();

@@ -1,4 +1,12 @@
-export function Work() {
+import { Picture } from "@/src/components/site/Picture";
+import { siteWork } from "@/src/lib/site/content";
+
+export async function Work() {
+  // The first published case study stands in for the whole row of work on the
+  // front page; the rest of them are on the work page.
+  const work = await siteWork();
+  const project = work[0];
+
   return (
     <section className="section" id="work">
       <div className="container-page grid gap-6 lg:grid-cols-[2fr_1fr]">
@@ -7,14 +15,20 @@ export function Work() {
           className="motion-lift grid content-start gap-4 rounded-[20px] border border-border bg-surface p-9"
         >
           <p className="eyebrow">Case study</p>
-          <div className="flex aspect-[16/7] items-center justify-center rounded-[14px] border border-dashed border-[#c3cad5] text-sm text-ink-subtle">
-            [PROJECT SCREENSHOT]
-          </div>
+          <Picture
+            src={project?.imageUrl ?? ""}
+            alt={project ? `A screenshot of ${project.name}` : "[Project screenshot]"}
+            placeholder="[PROJECT SCREENSHOT]"
+            className="aspect-[16/7]"
+          />
           <h3 className="text-2xl font-semibold">
-            [Project name] — [one-line result]
+            {project
+              ? `${project.name} — ${project.result}`
+              : "[Project name] — [one-line result]"}
           </h3>
           <p className="text-ink-muted">
-            Problem → solution → result. Add your first client project here.
+            {project?.summary ??
+              "Problem → solution → result. Add your first client project here."}
           </p>
         </article>
 
@@ -33,10 +47,12 @@ export function Work() {
             <path d="M4 18v-5a6 6 0 0 1 6-6v3a3 3 0 0 0-3 3h3v5H4zm10 0v-5a6 6 0 0 1 6-6v3a3 3 0 0 0-3 3h3v5h-6z" />
           </svg>
           <blockquote className="m-0 font-display text-[1.375rem] font-semibold leading-[1.4]">
-            [CLIENT QUOTE — what changed after working with OrLabs.]
+            {project?.quote ??
+              "[CLIENT QUOTE — what changed after working with OrLabs.]"}
           </blockquote>
           <figcaption>
-            <strong>[Name]</strong> · [Role, Company]
+            <strong>{project?.quoteName ?? "[Name]"}</strong> ·{" "}
+            {project?.quoteRole ?? "[Role, Company]"}
           </figcaption>
         </figure>
       </div>

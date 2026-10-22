@@ -1,8 +1,11 @@
 import Link from "next/link";
-import { serviceIcons } from "@/src/content/service-icons";
-import { services } from "@/src/content/services";
+import { defaultServiceIcon, serviceIcons } from "@/src/content/service-icons";
+import { siteServices } from "@/src/lib/site/content";
 
-export function Services() {
+export async function Services() {
+  // The services come from the portal: only the published ones are shown.
+  const services = await siteServices();
+
   return (
     <section className="section" id="services">
       <div className="container-page">
@@ -31,7 +34,7 @@ export function Services() {
               className="motion-lift grid content-start gap-3.5 rounded-card border border-border bg-surface p-7"
             >
               <span className="grid h-12 w-12 place-items-center rounded-xl bg-navy text-gold">
-                {serviceIcons[service.slug]}
+                {serviceIcons[service.slug] ?? defaultServiceIcon}
               </span>
               <h3 className="text-h3 font-semibold">
                 <Link

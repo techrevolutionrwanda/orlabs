@@ -3,6 +3,7 @@ import { CtaBand } from "@/src/components/site/CtaBand";
 import { PageHero } from "@/src/components/site/PageHero";
 import { SectionHead } from "@/src/components/site/SectionHead";
 import { RevealController } from "@/src/components/site/RevealController";
+import { siteContactChannels, siteRoles } from "@/src/lib/site/content";
 
 export const metadata: Metadata = {
   title: "Careers — Join the Lab | OrLabs Tech Industries",
@@ -33,43 +34,29 @@ const culture = [
   },
 ];
 
-const roles = [
-  {
-    title: "[ROLE]",
-    discipline: "[Team or discipline]",
-    location: "Kigali, Rwanda · [Employment type]",
-    summary: "[One-line description of the role.]",
-  },
-  {
-    title: "[ROLE]",
-    discipline: "[Team or discipline]",
-    location: "Kigali, Rwanda · [Employment type]",
-    summary: "[One-line description of the role.]",
-  },
-  {
-    title: "[ROLE]",
-    discipline: "[Team or discipline]",
-    location: "Kigali, Rwanda · [Employment type]",
-    summary: "[One-line description of the role.]",
-  },
-];
+export default async function CareersPage() {
+  // The open roles come from the portal: only the published ones are shown,
+  // and the address to send a CV to comes from the contact details.
+  const roles = await siteRoles();
+  const channels = await siteContactChannels();
+  const email = channels.find((channel) => channel.kind === "email");
+  const address = email?.label ?? "[EMAIL]";
 
-const steps = [
-  {
-    title: "Send us your CV",
-    body: "Email [EMAIL] with your CV and a short note on the kind of work you want to do.",
-  },
-  {
-    title: "A conversation",
-    body: "We will invite you for a chat about the role, the team and how we work.",
-  },
-  {
-    title: "A practical exercise",
-    body: "A short, practical exercise so we can see how you think and how you build.",
-  },
-];
+  const steps = [
+    {
+      title: "Send us your CV",
+      body: `Email ${address} with your CV and a short note on the kind of work you want to do.`,
+    },
+    {
+      title: "A conversation",
+      body: "We will invite you for a chat about the role, the team and how we work.",
+    },
+    {
+      title: "A practical exercise",
+      body: "A short, practical exercise so we can see how you think and how you build.",
+    },
+  ];
 
-export default function CareersPage() {
   return (
     <main className="flex-1" id="main">
       <RevealController />
@@ -110,16 +97,20 @@ export default function CareersPage() {
             tone="dark"
             eyebrow="Open roles"
             title="Where you could fit in."
-            lead="Nothing is published yet — send us your CV and we will tell you where you could plug in."
+            lead={
+              roles.length > 0
+                ? "The roles the studio is hiring for right now."
+                : "Nothing is published yet — send us your CV and we will tell you where you could plug in."
+            }
           />
 
           <ul
             data-reveal-group
             className="grid list-none grid-cols-1 gap-5 p-0 lg:grid-cols-3"
           >
-            {roles.map((role, index) => (
+            {roles.map((role) => (
               <li
-                key={index}
+                key={role.id}
                 className="motion-lift motion-lift-dark grid content-start gap-2.5 rounded-card border border-navy-line bg-navy-soft p-7"
               >
                 <h3 className="text-h3 font-semibold text-white">{role.title}</h3>
@@ -164,7 +155,7 @@ export default function CareersPage() {
       <CtaBand
         title="Not seeing the right role?"
         body="Send us your CV anyway. We read every one, and the right person often arrives before the job description does."
-        primary={{ label: "Email [EMAIL]", href: "mailto:[EMAIL]" }}
+        primary={{ label: `Email ${address}`, href: email?.href || "mailto:[EMAIL]" }}
         secondary={{ label: "About OrLabs", href: "/about" }}
       />
     </main>

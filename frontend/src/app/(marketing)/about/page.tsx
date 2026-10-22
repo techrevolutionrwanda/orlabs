@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { CtaBand } from "@/src/components/site/CtaBand";
 import { PageHero } from "@/src/components/site/PageHero";
+import { Picture } from "@/src/components/site/Picture";
 import { SectionHead } from "@/src/components/site/SectionHead";
 import { RevealController } from "@/src/components/site/RevealController";
+import { sitePublicTeam } from "@/src/lib/site/content";
 
 export const metadata: Metadata = {
   title: "About OrLabs — Software engineering from Kigali, Rwanda",
@@ -33,9 +35,11 @@ const values = [
   },
 ];
 
-const team = ["[Name]", "[Name]", "[Name]", "[Name]"];
+export default async function AboutPage() {
+  // The people on the grid come from the portal: only the published ones are
+  // shown.
+  const team = await sitePublicTeam();
 
-export default function AboutPage() {
   return (
     <main className="flex-1" id="main">
       <RevealController />
@@ -135,28 +139,36 @@ export default function AboutPage() {
           <SectionHead
             eyebrow="The team"
             title="Engineers in Kigali."
-            lead="The people behind the work — [TEAM PHOTO], [Name] and [Role] still to be confirmed."
+            lead="The people behind the work — the team in Kigali, Rwanda."
           />
 
           <ul
             data-reveal-group
             className="grid list-none grid-cols-2 gap-5 p-0 lg:grid-cols-4"
           >
-            {team.map((name, index) => (
+            {team.map((person) => (
               <li
-                key={index}
+                key={person.id}
                 className="motion-lift grid content-start gap-3 rounded-card border border-border bg-surface p-5"
               >
-                <span
-                  aria-hidden="true"
-                  className="grid aspect-[4/3] w-full place-items-center rounded-xl bg-chip text-[0.8125rem] font-semibold uppercase tracking-[0.12em] text-ink-subtle"
-                >
-                  [TEAM PHOTO]
-                </span>
+                <Picture
+                  src={person.photoUrl}
+                  alt={`A portrait of ${person.name}`}
+                  placeholder="[TEAM PHOTO]"
+                  className="aspect-[4/3] rounded-xl"
+                  sizes="(min-width: 1024px) 25vw, 50vw"
+                />
                 <span className="text-[1.0625rem] font-semibold text-navy">
-                  {name}
+                  {person.name}
                 </span>
-                <span className="text-[0.9375rem] text-ink-subtle">[Role]</span>
+                <span className="text-[0.9375rem] text-ink-subtle">
+                  {person.role}
+                </span>
+                {person.bio ? (
+                  <span className="text-[0.9375rem] text-ink-muted">
+                    {person.bio}
+                  </span>
+                ) : null}
               </li>
             ))}
           </ul>

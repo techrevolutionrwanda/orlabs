@@ -1,4 +1,9 @@
 import Link from "next/link";
+import {
+  siteContactChannels,
+  siteServices,
+  siteSocialLinks,
+} from "@/src/lib/site/content";
 import { CopyrightYear } from "./CopyrightYear";
 import { Logo } from "./Logo";
 
@@ -10,14 +15,13 @@ const company = [
   { label: "Staff portal", href: "/portal" },
 ];
 
-const services = [
-  { label: "Custom software", href: "/#services" },
-  { label: "Web & mobile apps", href: "/#services" },
-  { label: "Cloud & DevOps", href: "/#services" },
-  { label: "Data & AI", href: "/#services" },
-];
+export async function Footer() {
+  // The services, the contact details and the social links come from the
+  // portal, so the footer shows what the studio has published.
+  const services = await siteServices();
+  const channels = await siteContactChannels();
+  const social = await siteSocialLinks();
 
-export function Footer() {
   return (
     <footer className="bg-navy-deep pb-8 pt-16 text-on-navy-muted">
       <div className="container-page">
@@ -59,13 +63,13 @@ export function Footer() {
               Services
             </h2>
             <ul className="mt-3.5 grid list-none gap-2.5 p-0 text-[0.9375rem]">
-              {services.map((item) => (
-                <li key={item.label}>
+              {services.map((service) => (
+                <li key={service.slug}>
                   <Link
-                    href={item.href}
+                    href={`/services/${service.slug}`}
                     className="text-on-navy-muted no-underline transition-colors hover:text-gold"
                   >
-                    {item.label}
+                    {service.title}
                   </Link>
                 </li>
               ))}
@@ -77,18 +81,44 @@ export function Footer() {
               Contact
             </h2>
             <ul className="mt-3.5 grid list-none gap-2.5 p-0 text-[0.9375rem]">
-              <li>[Street address], Kigali, Rwanda</li>
-              <li>
-                <a
-                  href="mailto:[EMAIL]"
-                  className="text-on-navy-muted no-underline transition-colors hover:text-gold"
-                >
-                  [EMAIL]
-                </a>
-              </li>
-              <li>[PHONE / WHATSAPP]</li>
+              {channels.map((channel) => (
+                <li key={channel.id}>
+                  {channel.href ? (
+                    <a
+                      href={channel.href}
+                      className="text-on-navy-muted no-underline transition-colors hover:text-gold"
+                    >
+                      {channel.label}
+                    </a>
+                  ) : (
+                    channel.label
+                  )}
+                </li>
+              ))}
             </ul>
           </nav>
+
+          {social.length > 0 ? (
+            <nav aria-label="Elsewhere">
+              <h2 className="text-[0.9375rem] font-semibold tracking-normal text-white">
+                Elsewhere
+              </h2>
+              <ul className="mt-3.5 grid list-none gap-2.5 p-0 text-[0.9375rem]">
+                {social.map((link) => (
+                  <li key={link.id}>
+                    <a
+                      href={link.url}
+                      className="text-on-navy-muted no-underline transition-colors hover:text-gold"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ) : null}
         </div>
 
         <div className="mt-10 flex flex-wrap items-center justify-between gap-3 border-t border-[#1C3352] pt-6 text-[0.8125rem] text-[#9AA8BA]">
