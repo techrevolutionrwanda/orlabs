@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import trustedByRoutes from "./routes/trustedBy.route.js";
+import workRoutes from "./routes/work.routes.js";
 
 let app = express();
 dotenv.config();
@@ -19,8 +20,8 @@ app.get("/", (req: Request, res: Response) => {
 
 //routes
 app.use("/trusted-by", trustedByRoutes);
-
-const PORT = process.env.PORT || 3000;
+app.use("/work", workRoutes);
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
