@@ -111,6 +111,23 @@
     @apply font-semibold underline decoration-1 underline-offset-4;
   }
 
+  /* The inputs of the content screens. */
+  .field {
+    @apply min-h-[44px] w-full rounded-[12px] border border-border bg-surface px-3.5 text-[0.9375rem] text-ink transition-colors placeholder:text-ink-subtle focus:border-border-strong;
+  }
+
+  .field[aria-invalid="true"] {
+    @apply border-navy;
+  }
+
+  .field-label {
+    @apply block text-[0.875rem] font-semibold text-navy;
+  }
+
+  .field-help {
+    @apply mt-1.5 text-[0.8125rem] text-ink-subtle;
+  }
+
   .skip-link {
     @apply absolute top-0 left-[-9999px] z-100 bg-gold px-4 py-3 font-semibold text-navy no-underline;
   }
