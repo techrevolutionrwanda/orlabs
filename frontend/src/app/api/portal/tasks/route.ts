@@ -1,4 +1,4 @@
-import { listTasks } from "@/src/data/portal/store";
+import { listRecords } from "@/src/data/portal/store";
 import { requirePortalSession } from "@/src/lib/portal/api";
 
 /**
@@ -16,7 +16,7 @@ export async function GET(request: Request) {
   const assignee = params.get("assignee");
   const status = params.get("status");
 
-  let tasks = listTasks();
+  let tasks = await listRecords("tasks");
 
   if (params.get("mine") === "1") {
     tasks = tasks.filter((task) => task.assignee === session.userId);

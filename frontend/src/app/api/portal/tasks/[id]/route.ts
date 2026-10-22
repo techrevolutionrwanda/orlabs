@@ -1,4 +1,4 @@
-import { updateTaskStatus } from "@/src/data/portal/store";
+import { updateRecord } from "@/src/data/portal/store";
 import type { TaskStatus } from "@/src/data/portal/types";
 import { requirePortalSession } from "@/src/lib/portal/api";
 
@@ -6,9 +6,6 @@ const statuses: TaskStatus[] = ["todo", "in-progress", "review", "done"];
 
 /**
  * PATCH /api/portal/tasks/[id] — move a task to another state.
- *
- * The mock store lives in memory, so the change lasts until the server
- * restarts.
  */
 export async function PATCH(
   request: Request,
@@ -38,7 +35,7 @@ export async function PATCH(
     );
   }
 
-  const task = updateTaskStatus(id, body.status as TaskStatus);
+  const task = await updateRecord("tasks", id, { status: body.status });
 
   if (!task) {
     return Response.json({ error: "No task with that id." }, { status: 404 });

@@ -1,4 +1,4 @@
-import { listProjects } from "@/src/data/portal/store";
+import { listRecords } from "@/src/data/portal/store";
 import { requirePortalSession } from "@/src/lib/portal/api";
 
 /** GET /api/portal/projects — every delivery project. */
@@ -7,5 +7,5 @@ export async function GET() {
 
   if (response) return response;
 
-  return Response.json({ projects: listProjects() });
+  return Response.json({ projects: await listRecords("projects") });
 }

@@ -1,466 +1,318 @@
+import { enqueueWrite, readPortalData, writePortalData } from "@/src/lib/portal/db";
+import {
+  isResourceKey,
+  resources,
+  type ResourceKey,
+} from "@/src/lib/portal/resources";
+
+import { seedPortalData } from "./seed";
 import type {
-  ContentEntry,
+  PortalData,
   PortalProject,
   PortalSummary,
   PortalTask,
   PortalTicket,
-  TaskStatus,
+  StoredTask,
   TeamMember,
-  TicketStatus,
 } from "./types";
 
 /**
- * The portal mock store.
+ * The portal store.
  *
- * It keeps everything in memory so the portal can be walked through without a
- * back end. Changes (a task moved to “done”, a ticket closed) last until the
- * server restarts — that is the point of a mock.
+ * Everything the portal holds is one object on disk. This module is the only
+ * place that reads and writes it, so every screen sees the same records and
+ * every change is written in one go.
  *
- * Nothing here is a real client, a real person or a real figure. Names and
- * clients stay as `[PLACEHOLDERS]` until the team fills them in.
+ * The records are handed out as copies: a screen can change what it received
+ * without changing the store, until it saves.
  */
 
-const team: TeamMember[] = [
-  {
-    id: "tm-001",
-    name: "[TEAM MEMBER]",
-    discipline: "Engineering",
-    location: "Kigali, Rwanda",
-    availability: "available",
-    since: "2023-04-01",
-  },
-  {
-    id: "tm-002",
-    name: "[TEAM MEMBER]",
-    discipline: "Engineering",
-    location: "Kigali, Rwanda",
-    availability: "partly-booked",
-    since: "2024-01-15",
-  },
-  {
-    id: "tm-003",
-    name: "[TEAM MEMBER]",
-    discipline: "Design",
-    location: "Kigali, Rwanda",
-    availability: "available",
-    since: "2023-09-01",
-  },
-  {
-    id: "tm-004",
-    name: "[TEAM MEMBER]",
-    discipline: "Delivery",
-    location: "Kigali, Rwanda",
-    availability: "away",
-    since: "2022-11-07",
-  },
-];
-
-const projects: PortalProject[] = [
-  {
-    id: "prj-001",
-    name: "[PROJECT NAME]",
-    client: "[CLIENT NAME]",
-    summary: "[ONE-LINE SUMMARY]",
-    status: "building",
-    progress: 62,
-    stack: ["TypeScript", "React", "Node.js", "PostgreSQL"],
-    team: ["tm-001", "tm-002", "tm-003"],
-    startedOn: "2026-07-06",
-    targetDate: "2026-11-27",
-  },
-  {
-    id: "prj-002",
-    name: "[PROJECT NAME]",
-    client: "[CLIENT NAME]",
-    summary: "[ONE-LINE SUMMARY]",
-    status: "review",
-    progress: 88,
-    stack: ["TypeScript", "React Native", "AWS"],
-    team: ["tm-001", "tm-004"],
-    startedOn: "2026-05-18",
-    targetDate: "2026-10-30",
-  },
-  {
-    id: "prj-003",
-    name: "[PROJECT NAME]",
-    client: "[CLIENT NAME]",
-    summary: "[ONE-LINE SUMMARY]",
-    status: "planning",
-    progress: 15,
-    stack: ["Python", "PostgreSQL"],
-    team: ["tm-003", "tm-004"],
-    startedOn: "2026-10-05",
-    targetDate: "2027-01-29",
-  },
-  {
-    id: "prj-004",
-    name: "[PROJECT NAME]",
-    client: "[CLIENT NAME]",
-    summary: "[ONE-LINE SUMMARY]",
-    status: "live",
-    progress: 100,
-    stack: ["Java", "Spring Boot", "Kubernetes"],
-    team: ["tm-002"],
-    startedOn: "2026-01-12",
-    targetDate: "2026-06-26",
-  },
-  {
-    id: "prj-005",
-    name: "[PROJECT NAME]",
-    client: "[CLIENT NAME]",
-    summary: "[ONE-LINE SUMMARY]",
-    status: "paused",
-    progress: 34,
-    stack: ["Go", "Docker"],
-    team: ["tm-001"],
-    startedOn: "2026-03-02",
-    targetDate: "[TARGET DATE]",
-  },
-];
-
-/**
- * A task as it is kept in the store — the project and the person are still
- * only ids. The names are resolved when the task is handed out.
- */
-type StoredTask = Omit<PortalTask, "projectName" | "assigneeName">;
-
-const tasks: StoredTask[] = [
-  {
-    id: "tsk-001",
-    title: "Wire the authentication flow end to end",
-    project: "prj-001",
-    assignee: "tm-002",
-    status: "in-progress",
-    priority: "high",
-    dueDate: "2026-10-27",
-    estimate: "3 days",
-    note: "[NOTE]",
-  },
-  {
-    id: "tsk-002",
-    title: "Review the reporting module",
-    project: "prj-001",
-    assignee: "tm-002",
-    status: "todo",
-    priority: "normal",
-    dueDate: "2026-10-30",
-    estimate: "1 day",
-    note: "[NOTE]",
-  },
-  {
-    id: "tsk-003",
-    title: "Prepare the release notes for the mobile release",
-    project: "prj-002",
-    assignee: "tm-002",
-    status: "review",
-    priority: "normal",
-    dueDate: "2026-10-24",
-    estimate: "Half a day",
-    note: "[NOTE]",
-  },
-  {
-    id: "tsk-004",
-    title: "Set up the delivery pipeline for the new service",
-    project: "prj-001",
-    assignee: "tm-001",
-    status: "done",
-    priority: "high",
-    dueDate: "2026-10-17",
-    estimate: "2 days",
-    note: "[NOTE]",
-  },
-  {
-    id: "tsk-005",
-    title: "Draft the discovery notes for the new engagement",
-    project: "prj-003",
-    assignee: "tm-004",
-    status: "todo",
-    priority: "normal",
-    dueDate: "2026-11-03",
-    estimate: "1 day",
-    note: "[NOTE]",
-  },
-  {
-    id: "tsk-006",
-    title: "Update the design system with the new components",
-    project: "prj-002",
-    assignee: "tm-003",
-    status: "in-progress",
-    priority: "low",
-    dueDate: "2026-10-29",
-    estimate: "2 days",
-    note: "[NOTE]",
-  },
-  {
-    id: "tsk-007",
-    title: "Document the on-call handover",
-    project: "prj-004",
-    assignee: "tm-002",
-    status: "done",
-    priority: "normal",
-    dueDate: "2026-10-10",
-    estimate: "Half a day",
-    note: "[NOTE]",
-  },
-  {
-    id: "tsk-008",
-    title: "Investigate the slow export job",
-    project: "prj-001",
-    assignee: "tm-002",
-    status: "todo",
-    priority: "high",
-    dueDate: "2026-10-22",
-    estimate: "1 day",
-    note: "[NOTE]",
-  },
-];
-
-const tickets: PortalTicket[] = [
-  {
-    id: "tkt-001",
-    subject: "[TICKET SUBJECT]",
-    requester: "[CLIENT NAME]",
-    severity: "high",
-    status: "open",
-    updatedOn: "2026-10-21",
-    channel: "Email",
-    body: "[TICKET BODY]",
-  },
-  {
-    id: "tkt-002",
-    subject: "[TICKET SUBJECT]",
-    requester: "[CLIENT NAME]",
-    severity: "medium",
-    status: "waiting",
-    updatedOn: "2026-10-20",
-    channel: "Phone",
-    body: "[TICKET BODY]",
-  },
-  {
-    id: "tkt-003",
-    subject: "[TICKET SUBJECT]",
-    requester: "[CLIENT NAME]",
-    severity: "low",
-    status: "open",
-    updatedOn: "2026-10-18",
-    channel: "Support portal",
-    body: "[TICKET BODY]",
-  },
-  {
-    id: "tkt-004",
-    subject: "[TICKET SUBJECT]",
-    requester: "[CLIENT NAME]",
-    severity: "medium",
-    status: "resolved",
-    updatedOn: "2026-10-15",
-    channel: "Email",
-    body: "[TICKET BODY]",
-  },
-];
-
-const content: ContentEntry[] = [
-  {
-    id: "cnt-001",
-    title: "Home page",
-    path: "/",
-    state: "published",
-    owner: "tm-004",
-    updatedOn: "2026-10-19",
-  },
-  {
-    id: "cnt-002",
-    title: "About",
-    path: "/about",
-    state: "published",
-    owner: "tm-004",
-    updatedOn: "2026-10-12",
-  },
-  {
-    id: "cnt-003",
-    title: "Services",
-    path: "/services",
-    state: "published",
-    owner: "tm-001",
-    updatedOn: "2026-10-09",
-  },
-  {
-    id: "cnt-004",
-    title: "Industries",
-    path: "/industries",
-    state: "in-review",
-    owner: "tm-003",
-    updatedOn: "2026-10-21",
-  },
-  {
-    id: "cnt-005",
-    title: "Work",
-    path: "/work",
-    state: "draft",
-    owner: "tm-004",
-    updatedOn: "2026-10-22",
-  },
-  {
-    id: "cnt-006",
-    title: "Labs",
-    path: "/labs",
-    state: "draft",
-    owner: "tm-002",
-    updatedOn: "2026-10-16",
-  },
-  {
-    id: "cnt-007",
-    title: "Careers",
-    path: "/careers",
-    state: "published",
-    owner: "tm-004",
-    updatedOn: "2026-10-05",
-  },
-  {
-    id: "cnt-008",
-    title: "Contact",
-    path: "/contact",
-    state: "published",
-    owner: "tm-004",
-    updatedOn: "2026-10-08",
-  },
-];
+type AnyRecord = { id: string; [key: string]: unknown };
 
 /* -------------------------------------------------------------------------- */
-/* The store itself                                                            */
+/* Reading                                                                      */
 /* -------------------------------------------------------------------------- */
 
-type PortalStore = {
-  projects: PortalProject[];
-  tasks: StoredTask[];
-  tickets: PortalTicket[];
-  team: TeamMember[];
-  content: ContentEntry[];
-};
+/**
+ * The records of a collection.
+ *
+ * A few records carry the names of the things they point at, so a list can be
+ * read without a second request.
+ */
+export async function listRecords<K extends ResourceKey>(
+  key: K,
+): Promise<PortalData[K]> {
+  const data = await readPortalData();
+  const records = data[key].map((record) => ({ ...record })) as AnyRecord[];
+
+  if (key === "tasks") {
+    const projects = index(data.projects);
+    const people = index(data.team);
+
+    for (const task of records) {
+      task.projectName = projects[task.project as string]?.name ?? "";
+      task.assigneeName = people[task.assignee as string]?.name ?? "";
+    }
+  }
+
+  return records as PortalData[K];
+}
+
+export async function getRecord<K extends ResourceKey>(
+  key: K,
+  id: string,
+): Promise<PortalData[K][number] | null> {
+  const records = await listRecords(key);
+
+  return (
+    (records as AnyRecord[]).find((record) => record.id === id) ?? null
+  ) as PortalData[K][number] | null;
+}
+
+function index(records: { id: string }[]): Record<string, { name: string }> {
+  const result: Record<string, { name: string }> = {};
+
+  for (const record of records) {
+    result[record.id] = record as { name: string };
+  }
+
+  return result;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Writing                                                                      */
+/* -------------------------------------------------------------------------- */
 
 /**
- * The one store every route handler works with.
+ * Adds a record.
  *
- * It is kept on `globalThis` on purpose: in development every route handler
- * is compiled on its own, so a plain module variable would give each of them
- * its own copy — a task moved in one route would be invisible in the next.
- * The first copy wins and everybody shares it.
- *
- * The store lives in the memory of the server process. It is emptied when
- * the server restarts — that is what a mock is.
+ * The id and the place in the order are worked out here, so the screens never
+ * have to.
  */
-const globalScope = globalThis as typeof globalThis & {
-  __orlabsPortalStore?: PortalStore;
-};
+export async function createRecord(
+  key: ResourceKey,
+  values: Record<string, unknown>,
+): Promise<AnyRecord> {
+  return enqueueWrite(async () => {
+    const data = await readPortalData();
+    const collection = data[key] as AnyRecord[];
+    const definition = resources[key];
 
-const store: PortalStore =
-  globalScope.__orlabsPortalStore ??
-  (globalScope.__orlabsPortalStore = {
-    projects,
-    tasks,
-    tickets,
-    team,
-    content,
+    const record: AnyRecord = {
+      ...values,
+      id: nextId(collection, definition.prefix),
+    };
+
+    if (definition.orderable && typeof record.order !== "number") {
+      record.order = nextOrder(collection);
+    }
+
+    collection.unshift(record);
+
+    await writePortalData(data);
+
+    return { ...record };
   });
-
-/* -------------------------------------------------------------------------- */
-/* Reads                                                                       */
-/* -------------------------------------------------------------------------- */
-
-export function listProjects(): PortalProject[] {
-  return store.projects.map((project) => ({ ...project }));
 }
 
-export function listTasks(): PortalTask[] {
-  return store.tasks.map((task) => ({
-    ...task,
-    projectName: projectName(task.project),
-    assigneeName: assigneeName(task.assignee),
-  }));
-}
-
-function projectName(id: string): string {
-  const project = store.projects.find((entry) => entry.id === id);
-  return project ? project.name : id;
-}
-
-function assigneeName(id: string): string {
-  const member = store.team.find((entry) => entry.id === id);
-  return member ? member.name : id;
-}
-
-export function listTickets(): PortalTicket[] {
-  return store.tickets.map((ticket) => ({ ...ticket }));
-}
-
-export function listTeam(): TeamMember[] {
-  return store.team.map((member) => ({ ...member }));
-}
-
-export function listContent(): ContentEntry[] {
-  return store.content.map((entry) => ({ ...entry }));
-}
-
-export function findTeamMember(id: string): TeamMember | undefined {
-  const member = store.team.find((entry) => entry.id === id);
-  return member ? { ...member } : undefined;
-}
-
-/* -------------------------------------------------------------------------- */
-/* Writes                                                                      */
-/* -------------------------------------------------------------------------- */
-
-export function updateTaskStatus(
+/**
+ * Changes a record.
+ *
+ * Only the fields that were sent are changed; the rest of the record stays
+ * as it was.
+ */
+export async function updateRecord(
+  key: ResourceKey,
   id: string,
-  status: TaskStatus,
-): PortalTask | null {
-  const task = store.tasks.find((entry) => entry.id === id);
+  values: Record<string, unknown>,
+): Promise<AnyRecord | null> {
+  return enqueueWrite(async () => {
+    const data = await readPortalData();
+    const collection = data[key] as AnyRecord[];
+    const record = collection.find((entry) => entry.id === id);
 
-  if (!task) return null;
+    if (!record) return null;
 
-  task.status = status;
+    for (const [name, value] of Object.entries(values)) {
+      if (name === "id") continue;
+      record[name] = value;
+    }
 
-  return {
-    ...task,
-    projectName: projectName(task.project),
-    assigneeName: assigneeName(task.assignee),
-  };
+    await writePortalData(data);
+
+    return { ...record };
+  });
 }
 
-export function updateTicketStatus(
+/**
+ * Removes a record.
+ *
+ * The records that point at it are listed first, so a screen can warn before
+ * anything is lost.
+ */
+export async function deleteRecord(
+  key: ResourceKey,
   id: string,
-  status: TicketStatus,
-): PortalTicket | null {
-  const ticket = store.tickets.find((entry) => entry.id === id);
+): Promise<boolean> {
+  return enqueueWrite(async () => {
+    const data = await readPortalData();
+    const collection = data[key] as AnyRecord[];
+    const at = collection.findIndex((entry) => entry.id === id);
 
-  if (!ticket) return null;
+    if (at === -1) return false;
 
-  ticket.status = status;
-  return { ...ticket };
+    collection.splice(at, 1);
+
+    await writePortalData(data);
+
+    return true;
+  });
+}
+
+/**
+ * The records that would break if this one was removed.
+ */
+export function findDependants(
+  data: PortalData,
+  key: ResourceKey,
+  id: string,
+): { type: string; id: string; label: string }[] {
+  const dependants: { type: string; id: string; label: string }[] = [];
+
+  if (key === "projects") {
+    for (const task of data.tasks) {
+      if (task.project === id) {
+        dependants.push({ type: "task", id: task.id, label: task.title });
+      }
+    }
+  }
+
+  if (key === "team") {
+    for (const task of data.tasks) {
+      if (task.assignee === id) {
+        dependants.push({ type: "task", id: task.id, label: task.title });
+      }
+    }
+
+    for (const project of data.projects) {
+      if (project.team.includes(id)) {
+        dependants.push({ type: "project", id: project.id, label: project.name });
+      }
+    }
+  }
+
+  return dependants;
+}
+
+export async function listDependants(
+  key: ResourceKey,
+  id: string,
+): Promise<{ type: string; id: string; label: string }[]> {
+  const data = await readPortalData();
+
+  return findDependants(data, key, id);
+}
+
+/**
+ * Moves a record up or down in the order of its collection.
+ */
+export async function moveRecord(
+  key: ResourceKey,
+  id: string,
+  direction: "up" | "down",
+): Promise<AnyRecord | null> {
+  return enqueueWrite(async () => {
+    const data = await readPortalData();
+    const collection = data[key] as AnyRecord[];
+    const at = collection.findIndex((entry) => entry.id === id);
+
+    if (at === -1) return null;
+
+    const to = direction === "up" ? at - 1 : at + 1;
+
+    if (to < 0 || to >= collection.length) return null;
+
+    const moved = collection[at];
+    const other = collection[to];
+
+    collection[at] = other;
+    collection[to] = moved;
+
+    await writePortalData(data);
+
+    return { ...moved };
+  });
+}
+
+/**
+ * Puts the order of a collection back in a row, so nothing is left with the
+ * same number twice.
+ */
+export async function packOrder(key: ResourceKey): Promise<void> {
+  return enqueueWrite(async () => {
+    const data = await readPortalData();
+    const collection = data[key] as AnyRecord[];
+
+    collection.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+    collection.forEach((record, position) => {
+      record.order = position;
+    });
+
+    await writePortalData(data);
+  });
 }
 
 /* -------------------------------------------------------------------------- */
-/* Summary                                                                     */
+/* Helpers                                                                      */
+/* -------------------------------------------------------------------------- */
+
+function nextId(collection: { id: string }[], prefix: string): string {
+  let highest = 0;
+
+  for (const record of collection) {
+    const match = /^(\d+)$/.exec(record.id.replace(`${prefix}-`, ""));
+
+    if (match) highest = Math.max(highest, Number(match[1]));
+  }
+
+  return `${prefix}-${String(highest + 1).padStart(3, "0")}`;
+}
+
+function nextOrder(collection: { order?: number }[]): number {
+  let highest = -1;
+
+  for (const record of collection) {
+    if (typeof record.order === "number") {
+      highest = Math.max(highest, record.order);
+    }
+  }
+
+  return highest + 1;
+}
+
+/* -------------------------------------------------------------------------- */
+/* The summary                                                                  */
 /* -------------------------------------------------------------------------- */
 
 /**
- * The numbers on the dashboard are counted from the mock store — they are
- * never written down by hand.
+ * The numbers on the dashboard are counted from the store — they are never
+ * written down by hand.
  */
-export function portalSummary(
+export async function portalSummary(
   role: "admin" | "worker",
   userId: string,
-): PortalSummary {
+): Promise<PortalSummary> {
+  const data = await readPortalData();
+
   if (role === "admin") {
-    const live = store.projects.filter((project) => project.status === "live");
-    const running = store.projects.filter(
+    const live = data.projects.filter((project) => project.status === "live");
+    const running = data.projects.filter(
       (project) => project.status === "building" || project.status === "review",
     );
-    const openTickets = store.tickets.filter(
+    const openTickets = data.tickets.filter(
       (ticket) => ticket.status !== "resolved",
     );
-    const pendingContent = store.content.filter(
-      (entry) => entry.state !== "published",
-    );
+    const pendingContent = countPendingContent(data);
     const averageProgress =
       running.length === 0
         ? 0
@@ -492,30 +344,31 @@ export function portalSummary(
         },
         {
           label: "Content to publish",
-          value: pendingContent.length,
+          value: pendingContent,
           suffix: "",
           hint: "Drafts and pages in review",
         },
       ],
       highlights: [
         { label: "Average progress", value: `${averageProgress}%` },
-        { label: "People on the team", value: String(store.team.length) },
+        { label: "People on the team", value: String(data.team.length) },
         {
           label: "Next release",
-          value: store.projects
-            .filter((project) => project.status !== "live")
-            .map((project) => project.targetDate)
-            .sort()[0] ?? "—",
+          value:
+            data.projects
+              .filter((project) => project.status !== "live")
+              .map((project) => project.targetDate)
+              .sort()[0] ?? "—",
         },
       ],
     };
   }
 
-  const mine = store.tasks.filter((task) => task.assignee === userId);
+  const mine = data.tasks.filter((task) => task.assignee === userId);
   const open = mine.filter((task) => task.status !== "done");
   const done = mine.filter((task) => task.status === "done");
   const highPriority = open.filter((task) => task.priority === "high");
-  const myTickets = store.tickets.filter((ticket) => ticket.status !== "resolved");
+  const myTickets = data.tickets.filter((ticket) => ticket.status !== "resolved");
 
   return {
     role,
@@ -553,11 +406,86 @@ export function portalSummary(
   };
 }
 
-function projectsOf(list: StoredTask[]): string[] {
-  return [...new Set(list.map((task) => task.project))];
+/**
+ * The website records that are not published yet.
+ */
+export function countPendingContent(data: PortalData): number {
+  let count = 0;
+
+  for (const key of Object.keys(resources) as ResourceKey[]) {
+    const definition = resources[key];
+
+    if (!definition.published) continue;
+
+    const collection = data[key] as { state?: string }[];
+
+    count += collection.filter((record) => record.state !== "published").length;
+  }
+
+  return count;
 }
 
-function nextDueDate(list: StoredTask[]): string {
-  const dates = list.map((task) => task.dueDate).sort();
-  return dates[0] ?? "—";
+/**
+ * Every website record in one list, so the content overview can show where
+ * each one stands.
+ */
+export async function listWebsiteContent(): Promise<
+  {
+    key: ResourceKey;
+    title: string;
+    singular: string;
+    id: string;
+    label: string;
+    state: string;
+  }[]
+> {
+  const data = await readPortalData();
+  const rows: {
+    key: ResourceKey;
+    title: string;
+    singular: string;
+    id: string;
+    label: string;
+    state: string;
+  }[] = [];
+
+  for (const key of Object.keys(resources) as ResourceKey[]) {
+    const definition = resources[key];
+
+    if (!definition.published) continue;
+
+    const collection = data[key] as AnyRecord[];
+
+    for (const record of collection) {
+      rows.push({
+        key,
+        title: definition.title,
+        singular: definition.singular,
+        id: record.id,
+        label: String(record[definition.titleField] ?? record.id),
+        state: String(record.state ?? "published"),
+      });
+    }
+  }
+
+  return rows;
 }
+
+/* -------------------------------------------------------------------------- */
+/* The seed                                                                     */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Puts the store back to the seed it started with.
+ */
+export async function resetPortalData(): Promise<void> {
+  await enqueueWrite(async () => {
+    await writePortalData(seedPortalData());
+  });
+}
+
+export function isKnownResource(key: string): key is ResourceKey {
+  return isResourceKey(key);
+}
+
+export type { PortalProject, PortalTask, PortalTicket, StoredTask, TeamMember };
