@@ -31,7 +31,7 @@ export default function Footer() {
   return (
     <footer className="bg-navy-deep pt-16 pb-8 text-on-navy-muted">
       <div className="mx-auto max-w-container px-[var(--gutter)]">
-        <div className="grid gap-10 max-[860px]:grid-cols-2">
+        <div className="grid gap-10 min-[861px]:grid-cols-[1.6fr_repeat(3,1fr)] max-[860px]:grid-cols-2">
           <div className="max-[860px]:col-span-2">
             <Link
               href="/#top"
