@@ -1,7 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Sora } from "next/font/google";
-import { Footer } from "@/src/components/site/Footer";
-import { Header } from "@/src/components/site/Header";
 import "./globals.css";
 
 const sora = Sora({
@@ -51,9 +49,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <a className="skip-link" href="#main">
           Skip to content
         </a>
-        <Header />
         {children}
-        <Footer />
       </body>
     </html>
   );
