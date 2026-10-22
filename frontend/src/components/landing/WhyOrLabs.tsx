@@ -21,7 +21,7 @@ export function WhyOrLabs() {
   return (
     <section className="section bg-navy" id="about">
       <div className="container-page grid gap-9 lg:grid-cols-[1fr_1.1fr] lg:gap-14">
-        <div>
+        <div data-reveal>
           <p className="text-[0.8125rem] font-semibold uppercase tracking-[0.16em] text-gold">
             Why OrLabs
           </p>
@@ -38,7 +38,11 @@ export function WhyOrLabs() {
           </a>
         </div>
 
-        <ul className="grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2">
+        <ul
+          data-reveal
+          style={{ "--reveal-delay": "120ms" } as React.CSSProperties}
+          className="grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2"
+        >
           {values.map((value) => (
             <li
               key={value.title}

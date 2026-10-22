@@ -17,7 +17,7 @@ export function Industries() {
       id="industries"
     >
       <div className="container-page grid items-start gap-12 lg:grid-cols-[1fr_2fr]">
-        <div>
+        <div data-reveal>
           <p className="eyebrow">Industries</p>
           <h2 className="mt-3 mb-3 text-[clamp(1.75rem,2vw_+_1rem,2.25rem)]">
             One engineering team. Many industries.
@@ -28,7 +28,11 @@ export function Industries() {
           </p>
         </div>
 
-        <ul className="flex list-none flex-wrap gap-3 p-0">
+        <ul
+          data-reveal
+          style={{ "--reveal-delay": "120ms" } as React.CSSProperties}
+          className="flex list-none flex-wrap gap-3 p-0"
+        >
           {industries.map((industry) => (
             <li
               key={industry}

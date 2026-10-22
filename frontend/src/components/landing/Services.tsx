@@ -79,7 +79,10 @@ export function Services() {
   return (
     <section className="section" id="services">
       <div className="container-page">
-        <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
+        <div
+          data-reveal
+          className="mb-12 flex flex-wrap items-end justify-between gap-6"
+        >
           <div className="grid max-w-[640px] gap-3">
             <p className="eyebrow">What we do</p>
             <h2 className="text-h2">
@@ -91,7 +94,11 @@ export function Services() {
           </a>
         </div>
 
-        <ul className="grid list-none grid-cols-1 gap-5 p-0 sm:grid-cols-2 lg:grid-cols-3">
+        <ul
+          data-reveal
+          style={{ "--reveal-delay": "120ms" } as React.CSSProperties}
+          className="grid list-none grid-cols-1 gap-5 p-0 sm:grid-cols-2 lg:grid-cols-3"
+        >
           {services.map((service) => (
             <li
               key={service.title}

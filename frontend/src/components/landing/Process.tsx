@@ -13,14 +13,21 @@ export function Process() {
   return (
     <section className="section" id="process">
       <div className="container-page">
-        <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
+        <div
+          data-reveal
+          className="mb-12 flex flex-wrap items-end justify-between gap-6"
+        >
           <div className="grid max-w-[640px] gap-3">
             <p className="eyebrow">How we work</p>
             <h2 className="text-h2">Five steps, no black boxes.</h2>
           </div>
         </div>
 
-        <ol className="grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2 lg:grid-cols-5">
+        <ol
+          data-reveal
+          style={{ "--reveal-delay": "120ms" } as React.CSSProperties}
+          className="grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2 lg:grid-cols-5"
+        >
           {steps.map((step, index) => (
             <li
               key={step.title}
