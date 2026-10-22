@@ -1,1 +1,73 @@
 @import "tailwindcss";
+
+/* ===== DESIGN TOKENS (keep in sync with template/orlabs-website-template/design-tokens.json) ===== */
+@theme {
+  /* Colors */
+  --color-navy: #0b1f3a; /* primary / dark surfaces */
+  --color-navy-deep: #071628; /* footer */
+  --color-navy-line: #22406a; /* borders on navy */
+  --color-gold: #f5b301; /* accent: CTAs, highlights, "Or" */
+  --color-gold-hover: #ffc21f; /* primary button hover */
+  --color-teal: #00a6a6; /* secondary accent: decoration only */
+  --color-teal-text: #007c7c; /* teal that passes 4.5:1 on light bg */
+  --color-bg: #f7f8fa; /* page background */
+  --color-surface: #ffffff; /* cards */
+  --color-chip: #eef2f7;
+  --color-border: #e3e7ed;
+  --color-ink: #2b2f36; /* body text on light */
+  --color-ink-muted: #4a515c;
+  --color-ink-subtle: #5a6270;
+  --color-on-navy: #ffffff;
+  --color-on-navy-muted: #c9d3e0;
+
+  /* Fonts */
+  --font-display: var(--font-sora, "Sora"), "Inter", system-ui, sans-serif;
+  --font-sans: var(--font-inter, "Inter"), system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Radii */
+  --radius-sm: 12px;
+  --radius-card: 18px;
+  --radius-panel: 28px;
+  --radius-pill: 999px;
+
+  /* Layout */
+  --container: 1200px;
+  --gutter: 24px;
+}
+
+/* ===== BASE ===== */
+html {
+  scroll-behavior: smooth;
+}
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-ink);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+}
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  color: var(--color-navy);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin: 0;
+}
+a {
+  color: inherit;
+}
+:focus-visible {
+  outline: 3px solid var(--color-gold);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
