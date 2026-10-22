@@ -73,7 +73,7 @@ function index(records: { id: string }[]): Record<string, { name: string }> {
   const result: Record<string, { name: string }> = {};
 
   for (const record of records) {
-    result[record.id] = record as { name: string };
+    result[record.id] = record as unknown as { name: string };
   }
 
   return result;
@@ -253,7 +253,7 @@ export async function packOrder(key: ResourceKey): Promise<void> {
     const data = await readPortalData();
     const collection = data[key] as AnyRecord[];
 
-    collection.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+    collection.sort((a, b) => Number(a.order ?? 0) - Number(b.order ?? 0));
     collection.forEach((record, position) => {
       record.order = position;
     });
@@ -278,16 +278,26 @@ function nextId(collection: { id: string }[], prefix: string): string {
   return `${prefix}-${String(highest + 1).padStart(3, "0")}`;
 }
 
-function nextOrder(collection: { order?: number }[]): number {
+function nextOrder(collection: AnyRecord[]): number {
   let highest = -1;
 
   for (const record of collection) {
-    if (typeof record.order === "number") {
-      highest = Math.max(highest, record.order);
-    }
+    const order = Number(record.order);
+
+    if (Number.isFinite(order)) highest = Math.max(highest, order);
   }
 
   return highest + 1;
+}
+
+function projectsOf(list: StoredTask[]): string[] {
+  return [...new Set(list.map((task) => task.project))];
+}
+
+function nextDueDate(list: StoredTask[]): string {
+  const dates = list.map((task) => task.dueDate).sort();
+
+  return dates[0] ?? "—";
 }
 
 /* -------------------------------------------------------------------------- */

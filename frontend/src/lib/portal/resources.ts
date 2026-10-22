@@ -657,13 +657,13 @@ export function resourcesInGroup(group: PortalGroup): ResourceDef[] {
 }
 
 /** The records of a collection, keyed by their id. */
-export function indexById(
-  records: PortalData[ResourceKey],
-): Record<string, PortalData[ResourceKey][number]> {
-  const index: Record<string, PortalData[ResourceKey][number]> = {};
+export function indexById<K extends ResourceKey>(
+  records: PortalData[K],
+): Record<string, PortalData[K][number]> {
+  const index = {} as Record<string, PortalData[K][number]>;
 
-  for (const record of records as { id: string }[]) {
-    index[record.id] = record;
+  for (const record of records as unknown as { id: string }[]) {
+    index[record.id] = record as unknown as PortalData[K][number];
   }
 
   return index;

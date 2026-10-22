@@ -1,12 +1,36 @@
 "use client";
 
+import Link from "next/link";
+
+import { cmsPath, type ResourceKey } from "@/src/lib/portal/resources";
+
 import { StatusChip } from "./StatusChip";
-import type { ContentEntry } from "@/src/data/portal/types";
 
 /**
- * The public pages and where each one stands.
+ * One website record, as the content overview shows it.
  */
-export function ContentList({ content }: { content: ContentEntry[] }) {
+export type WebsiteContentRow = {
+  key: ResourceKey;
+  title: string;
+  singular: string;
+  id: string;
+  label: string;
+  state: string;
+};
+
+/**
+ * Every record the public website shows, and where each one stands.
+ */
+export function ContentList({ content }: { content: WebsiteContentRow[] }) {
+  if (content.length === 0) {
+    return (
+      <p className="rounded-card border border-border bg-surface p-6 text-[0.9375rem] text-ink-muted">
+        There is nothing to publish yet. Add a record to one of the website
+        collections and it will show up here.
+      </p>
+    );
+  }
+
   return (
     <ul
       data-reveal-group
@@ -14,19 +38,29 @@ export function ContentList({ content }: { content: ContentEntry[] }) {
     >
       {content.map((entry) => (
         <li
-          key={entry.id}
+          key={`${entry.key}-${entry.id}`}
           className="motion-lift flex flex-wrap items-center justify-between gap-4 rounded-card border border-border bg-surface px-6 py-4"
         >
           <div>
-            <h3 className="text-[1.0625rem] font-semibold text-navy">{entry.title}</h3>
-            <p className="mt-0.5 text-[0.8125rem] text-ink-subtle">{entry.path}</p>
+            <p className="text-[0.75rem] font-semibold uppercase tracking-[0.16em] text-teal-text">
+              {entry.title}
+            </p>
+            <h3 className="mt-1 text-[1.0625rem] font-semibold text-navy">
+              {entry.label}
+            </h3>
           </div>
 
           <div className="flex flex-wrap items-center gap-4">
-            <p className="text-[0.8125rem] text-ink-muted">
-              {entry.owner} · {entry.updatedOn}
-            </p>
             <StatusChip value={entry.state} />
+            <Link
+              href={cmsPath(entry.key, entry.id)}
+              className="link-arrow text-[0.875rem] text-ink-muted no-underline"
+            >
+              Edit
+              <span className="motion-arrow" aria-hidden="true">
+                →
+              </span>
+            </Link>
           </div>
         </li>
       ))}

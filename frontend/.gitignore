@@ -17,6 +17,9 @@
 /.next/
 /out/
 
+# the portal store — written at runtime, seeded from src/data/portal/seed.ts
+/data
+
 # production
 /build
 

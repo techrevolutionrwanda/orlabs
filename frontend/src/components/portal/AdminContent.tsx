@@ -1,16 +1,15 @@
 "use client";
 
-import type { ContentEntry } from "@/src/data/portal/types";
-
+import type { WebsiteContentRow } from "./ContentList";
 import { ContentList } from "./ContentList";
 import { PortalResource } from "./PortalResource";
 import { usePortalData } from "./usePortalData";
 
 /**
- * The public pages and where each one stands.
+ * Every record the public website shows, and where each one stands.
  */
 export function AdminContent() {
-  const content = usePortalData<{ content: ContentEntry[] }>(
+  const content = usePortalData<{ content: WebsiteContentRow[] }>(
     "/api/portal/content",
   );
 

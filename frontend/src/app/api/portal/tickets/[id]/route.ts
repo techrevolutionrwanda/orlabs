@@ -1,4 +1,4 @@
-import { updateTicketStatus } from "@/src/data/portal/store";
+import { updateRecord } from "@/src/data/portal/store";
 import type { TicketStatus } from "@/src/data/portal/types";
 import { requirePortalSession } from "@/src/lib/portal/api";
 
@@ -33,7 +33,7 @@ export async function PATCH(
     );
   }
 
-  const ticket = updateTicketStatus(id, body.status as TicketStatus);
+  const ticket = await updateRecord("tickets", id, { status: body.status });
 
   if (!ticket) {
     return Response.json(
