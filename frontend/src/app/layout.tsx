@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Sora } from "next/font/google";
+import { Footer } from "@/src/components/site/Footer";
+import { Header } from "@/src/components/site/Header";
 import "./globals.css";
 
 const sora = Sora({
@@ -42,7 +44,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${sora.variable} ${inter.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">
+        <a className="skip-link" href="#main">
+          Skip to content
+        </a>
+        <Header />
+        {children}
+        <Footer />
+      </body>
     </html>
   );
 }

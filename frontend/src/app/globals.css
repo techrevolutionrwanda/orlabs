@@ -110,6 +110,14 @@
   .link-arrow {
     @apply font-semibold underline decoration-1 underline-offset-4;
   }
+
+  .skip-link {
+    @apply absolute top-0 left-[-9999px] z-100 bg-gold px-4 py-3 font-semibold text-navy no-underline;
+  }
+
+  .skip-link:focus {
+    @apply top-4 left-4;
+  }
 }
 
 /* ============================================================
