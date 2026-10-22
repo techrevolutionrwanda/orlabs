@@ -13,6 +13,10 @@ import { useEffect } from "react";
  * `data-reveal="up|left|scale|fade"` picks the direction of the movement.
  * `data-reveal-group` on a container reveals its direct children one after
  * another; the delay between them comes from `--stagger-step`.
+ *
+ * Content that arrives later (the portal fetches its data in the browser) is
+ * picked up as well, so a list that loads after the first paint still fades
+ * in step by step.
  */
 type RevealVariant = "up" | "left" | "scale" | "fade";
 
@@ -37,32 +41,12 @@ export function RevealController() {
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    const targets = new Map<HTMLElement, string>();
-
-    for (const element of document.querySelectorAll<HTMLElement>("[data-reveal]")) {
-      targets.set(element, pendingClasses[readVariant(element, "data-reveal")]);
-    }
-
-    for (const group of document.querySelectorAll<HTMLElement>(
-      "[data-reveal-group]",
-    )) {
-      const variant = pendingClasses[
-        readVariant(group, "data-reveal-group")
-      ];
-
-      for (const child of Array.from(group.children)) {
-        if (child instanceof HTMLElement && !targets.has(child)) {
-          targets.set(child, variant);
-        }
-      }
-    }
-
-    if (!targets.size) return;
-
+    const known = new WeakSet<HTMLElement>();
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
           if (!entry.isIntersecting) continue;
+
           entry.target.classList.remove(
             "reveal-pending",
             "reveal-pending-left",
@@ -75,15 +59,53 @@ export function RevealController() {
       { threshold: 0.12, rootMargin: "0px 0px -6% 0px" },
     );
 
-    for (const [element, pendingClass] of targets) {
+    function watch(element: HTMLElement, pendingClass: string) {
+      if (known.has(element)) return;
+      known.add(element);
+
       const { top } = element.getBoundingClientRect();
+
       if (top > window.innerHeight * 0.92) {
         element.classList.add(pendingClass);
         observer.observe(element);
       }
     }
 
-    return () => observer.disconnect();
+    function scan() {
+      for (const element of document.querySelectorAll<HTMLElement>(
+        "[data-reveal]",
+      )) {
+        watch(element, pendingClasses[readVariant(element, "data-reveal")]);
+      }
+
+      for (const group of document.querySelectorAll<HTMLElement>(
+        "[data-reveal-group]",
+      )) {
+        const pendingClass =
+          pendingClasses[readVariant(group, "data-reveal-group")];
+
+        for (const child of Array.from(group.children)) {
+          if (child instanceof HTMLElement) {
+            watch(child, pendingClass);
+          }
+        }
+      }
+    }
+
+    scan();
+
+    const mutations = new MutationObserver((records) => {
+      const grew = records.some((record) => record.addedNodes.length > 0);
+
+      if (grew) scan();
+    });
+
+    mutations.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      mutations.disconnect();
+      observer.disconnect();
+    };
   }, []);
 
   return null;
