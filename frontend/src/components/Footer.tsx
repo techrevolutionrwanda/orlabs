@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Logo from "./Logo";
+import CopyrightYear from "./CopyrightYear";
 
 const FOOTER_COLUMNS = [
   {
@@ -89,7 +90,7 @@ export default function Footer() {
 
         <div className="mt-10 flex flex-wrap justify-between gap-3 border-t border-[#1C3352] pt-6 text-[0.8125rem] text-[#9AA8BA]">
           <span>
-            © {new Date().getFullYear()} OrLabs Tech Industries Ltd · [RDB
+            © <CopyrightYear /> OrLabs Tech Industries Ltd · [RDB
             registration no.]
           </span>
           <span>Rooted in Rwanda. Built for Africa.</span>

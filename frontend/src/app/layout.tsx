@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Sora } from "next/font/google";
+import Header from "@/src/components/Header";
+import Footer from "@/src/components/Footer";
 import "./globals.css";
 
 const inter = Inter({
@@ -27,7 +29,17 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${inter.variable} ${sora.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <a
+          href="#main"
+          className="absolute -left-[9999px] top-0 z-[100] rounded-sm bg-gold p-3 text-navy focus:left-4 focus:top-4"
+        >
+          Skip to content
+        </a>
+        <Header />
+        {children}
+        <Footer />
+      </body>
     </html>
   );
 }

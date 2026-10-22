@@ -1,7 +1,7 @@
-import React from 'react'
-
-export default function page() {
+export default function Page() {
   return (
-    <div>page</div>
-  )
+    <main id="main" className="flex-1">
+      {/* Page sections (hero, services, ...) are built on separate branches. */}
+    </main>
+  );
 }
