@@ -97,6 +97,9 @@ export function useCmsRecord(slug: string, id: string) {
   useEffect(() => {
     let active = true;
 
+    // A new record has no id yet, so there is nothing to ask for.
+    if (!id) return;
+
     fetch(`/api/portal/${slug}/${id}`, { headers: { Accept: "application/json" } })
       .then(async (response) => {
         const body = (await response.json().catch(() => null)) as {
@@ -125,6 +128,15 @@ export function useCmsRecord(slug: string, id: string) {
       active = false;
     };
   }, [slug, id, nonce]);
+
+  if (!id) {
+    return {
+      status: "ready" as CmsStatus,
+      row: null,
+      error: "",
+      reload: () => setNonce((value) => value + 1),
+    };
+  }
 
   if (state.id !== id) {
     return {

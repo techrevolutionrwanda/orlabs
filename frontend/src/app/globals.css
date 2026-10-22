@@ -107,6 +107,15 @@
     @apply -translate-y-px bg-white/[0.06];
   }
 
+  /* The quiet button of the light pages — the portal and the forms. */
+  .btn-quiet {
+    @apply border-border bg-surface text-ink-muted;
+  }
+
+  .btn-quiet:hover {
+    @apply -translate-y-px border-border-strong text-navy;
+  }
+
   .link-arrow {
     @apply font-semibold underline decoration-1 underline-offset-4;
   }
