@@ -12,6 +12,17 @@ const iconProps = {
   "aria-hidden": true,
 } as const;
 
+/**
+ * The icon used for a service that has no icon of its own — a service added
+ * in the portal before an icon was drawn for it.
+ */
+export const defaultServiceIcon = (
+  <svg {...iconProps}>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M12 8v8M8 12h8" />
+  </svg>
+);
+
 /** Icon per service slug — decorative only, always beside a text label. */
 export const serviceIcons: Record<string, ReactNode> = {
   "custom-software": (

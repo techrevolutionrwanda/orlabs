@@ -3,9 +3,9 @@ import Link from "next/link";
 import { CtaBand } from "@/src/components/site/CtaBand";
 import { PageHero } from "@/src/components/site/PageHero";
 import { SectionHead } from "@/src/components/site/SectionHead";
-import { serviceIcons } from "@/src/content/service-icons";
-import { services } from "@/src/content/services";
+import { defaultServiceIcon, serviceIcons } from "@/src/content/service-icons";
 import { RevealController } from "@/src/components/site/RevealController";
+import { siteServices } from "@/src/lib/site/content";
 
 export const metadata: Metadata = {
   title: "Services — Software, apps, cloud, data and integrations | OrLabs",
@@ -13,7 +13,11 @@ export const metadata: Metadata = {
     "Custom software, web and mobile apps, cloud and DevOps, data and AI, integrations and fintech, and IT consulting — engineered from Kigali, Rwanda for organisations across Africa.",
 };
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  // The services come from the portal, so a service that is published there
+  // is a service the website offers.
+  const services = await siteServices();
+
   return (
     <main className="flex-1" id="main">
       <RevealController />
@@ -41,7 +45,7 @@ export default function ServicesPage() {
                 className="motion-lift grid content-start gap-3.5 rounded-card border border-border bg-surface p-7"
               >
                 <span className="grid h-12 w-12 place-items-center rounded-xl bg-navy text-gold">
-                  {serviceIcons[service.slug]}
+                  {serviceIcons[service.slug] ?? defaultServiceIcon}
                 </span>
                 <h3 className="text-h3 font-semibold">
                   <Link

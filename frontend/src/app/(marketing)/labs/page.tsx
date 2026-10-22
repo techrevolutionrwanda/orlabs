@@ -4,7 +4,7 @@ import { CtaBand } from "@/src/components/site/CtaBand";
 import { PageHero } from "@/src/components/site/PageHero";
 import { SectionHead } from "@/src/components/site/SectionHead";
 import { RevealController } from "@/src/components/site/RevealController";
-import { labPosts } from "@/src/content/labs";
+import { siteLabNotes } from "@/src/lib/site/content";
 
 export const metadata: Metadata = {
   title: "Labs — Experiments and insights from OrLabs Tech Industries",
@@ -12,7 +12,10 @@ export const metadata: Metadata = {
     "Labs is the OrLabs playground: experiments, engineering notes and insights from our team in Kigali, Rwanda.",
 };
 
-export default function LabsPage() {
+export default async function LabsPage() {
+  // The notes come from the portal: only the published ones are shown.
+  const labPosts = await siteLabNotes();
+
   return (
     <main className="flex-1" id="main">
       <RevealController />

@@ -3,11 +3,16 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CtaBand } from "@/src/components/site/CtaBand";
 import { PageHero } from "@/src/components/site/PageHero";
-import { getProject, projects } from "@/src/content/projects";
+import { Picture } from "@/src/components/site/Picture";
 import { RevealController } from "@/src/components/site/RevealController";
+import { siteWork, siteWorkBySlug } from "@/src/lib/site/content";
 
-export function generateStaticParams() {
-  return projects.map((project) => ({ slug: project.slug }));
+export async function generateStaticParams() {
+  // The published case studies are known when the site is built, so each one
+  // gets a page of its own.
+  const work = await siteWork();
+
+  return work.map((project) => ({ slug: project.slug }));
 }
 
 // The page reads `params` while rendering, so a navigation into it is allowed
@@ -18,7 +23,7 @@ export async function generateMetadata({
   params,
 }: PageProps<"/work/[slug]">): Promise<Metadata> {
   const { slug } = await params;
-  const project = getProject(slug);
+  const project = await siteWorkBySlug(slug);
 
   if (!project) {
     return { title: "Case study not found | OrLabs" };
@@ -34,7 +39,7 @@ export default async function ProjectPage({
   params,
 }: PageProps<"/work/[slug]">) {
   const { slug } = await params;
-  const project = getProject(slug);
+  const project = await siteWorkBySlug(slug);
 
   if (!project) {
     notFound();
@@ -56,11 +61,14 @@ export default async function ProjectPage({
 
       <section className="section">
         <div className="container-page">
-          <div
-            data-reveal
-            className="flex aspect-[16/8] items-center justify-center rounded-[18px] border border-dashed border-[#c3cad5] text-sm text-ink-subtle"
-          >
-            [PROJECT SCREENSHOT]
+          <div data-reveal>
+            <Picture
+              src={project.imageUrl}
+              alt={`A screenshot of ${project.name}`}
+              placeholder="[PROJECT SCREENSHOT]"
+              className="aspect-[16/8] rounded-[18px]"
+              sizes="(min-width: 1024px) 80vw, 100vw"
+            />
           </div>
         </div>
       </section>

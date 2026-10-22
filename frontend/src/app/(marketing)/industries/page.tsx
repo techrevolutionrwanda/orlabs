@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { CtaBand } from "@/src/components/site/CtaBand";
 import { PageHero } from "@/src/components/site/PageHero";
 import { SectionHead } from "@/src/components/site/SectionHead";
-import { industries } from "@/src/content/industries";
 import { RevealController } from "@/src/components/site/RevealController";
+import { siteIndustries } from "@/src/lib/site/content";
 
 export const metadata: Metadata = {
   title: "Industries — Software for finance, health, agriculture and more | OrLabs",
@@ -11,7 +11,10 @@ export const metadata: Metadata = {
     "One engineering team, many industries: finance and microfinance, health, agriculture, construction, logistics, education, hospitality, government and NGOs, and retail and e-commerce.",
 };
 
-export default function IndustriesPage() {
+export default async function IndustriesPage() {
+  // The industries come from the portal: only the published ones are shown.
+  const industries = await siteIndustries();
+
   return (
     <main className="flex-1" id="main">
       <RevealController />

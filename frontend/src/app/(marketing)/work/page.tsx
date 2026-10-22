@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CtaBand } from "@/src/components/site/CtaBand";
 import { PageHero } from "@/src/components/site/PageHero";
+import { Picture } from "@/src/components/site/Picture";
 import { SectionHead } from "@/src/components/site/SectionHead";
-import { projects } from "@/src/content/projects";
 import { RevealController } from "@/src/components/site/RevealController";
+import { siteWork } from "@/src/lib/site/content";
 
 export const metadata: Metadata = {
   title: "Work — Case studies from OrLabs Tech Industries",
@@ -12,7 +13,11 @@ export const metadata: Metadata = {
     "Selected projects built by OrLabs Tech Industries in Kigali: the problem we were hired to solve, what we shipped, and what changed afterwards.",
 };
 
-export default function WorkPage() {
+export default async function WorkPage() {
+  // The case studies come from the portal: a case study that is published
+  // there shows up here, and one that is still a draft does not.
+  const work = await siteWork();
+
   return (
     <main className="flex-1" id="main">
       <RevealController />
@@ -34,12 +39,15 @@ export default function WorkPage() {
             data-reveal-group
             className="grid list-none grid-cols-1 gap-6 p-0 lg:grid-cols-2"
           >
-            {projects.map((project) => (
+            {work.map((project) => (
               <li key={project.slug}>
                 <article className="motion-lift grid h-full content-start gap-4 rounded-card border border-border bg-surface p-8">
-                  <div className="flex aspect-[16/9] items-center justify-center rounded-[14px] border border-dashed border-[#c3cad5] text-sm text-ink-subtle">
-                    [PROJECT SCREENSHOT]
-                  </div>
+                  <Picture
+                    src={project.imageUrl}
+                    alt={`A screenshot of ${project.name}`}
+                    placeholder="[PROJECT SCREENSHOT]"
+                    className="aspect-[16/9]"
+                  />
                   <h3 className="text-2xl font-semibold">
                     <Link
                       href={`/work/${project.slug}`}

@@ -4,11 +4,15 @@ import { notFound } from "next/navigation";
 import { CtaBand } from "@/src/components/site/CtaBand";
 import { PageHero } from "@/src/components/site/PageHero";
 import { SectionHead } from "@/src/components/site/SectionHead";
-import { serviceIcons } from "@/src/content/service-icons";
-import { getService, services } from "@/src/content/services";
+import { defaultServiceIcon, serviceIcons } from "@/src/content/service-icons";
 import { RevealController } from "@/src/components/site/RevealController";
+import { siteServiceBySlug, siteServices } from "@/src/lib/site/content";
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  // The published services are known when the site is built, so each one gets
+  // a page of its own.
+  const services = await siteServices();
+
   return services.map((service) => ({ slug: service.slug }));
 }
 
@@ -20,7 +24,7 @@ export async function generateMetadata({
   params,
 }: PageProps<"/services/[slug]">): Promise<Metadata> {
   const { slug } = await params;
-  const service = getService(slug);
+  const service = await siteServiceBySlug(slug);
 
   if (!service) {
     return { title: "Service not found | OrLabs" };
@@ -36,7 +40,7 @@ export default async function ServicePage({
   params,
 }: PageProps<"/services/[slug]">) {
   const { slug } = await params;
-  const service = getService(slug);
+  const service = await siteServiceBySlug(slug);
 
   if (!service) {
     notFound();
@@ -60,7 +64,7 @@ export default async function ServicePage({
         <div className="container-page grid gap-12 lg:grid-cols-[1fr_1.3fr]">
           <div data-reveal className="grid content-start gap-4">
             <span className="grid h-12 w-12 place-items-center rounded-xl bg-navy text-gold">
-              {serviceIcons[service.slug]}
+              {serviceIcons[service.slug] ?? defaultServiceIcon}
             </span>
             <h2 className="text-h2">The problem we solve</h2>
           </div>
