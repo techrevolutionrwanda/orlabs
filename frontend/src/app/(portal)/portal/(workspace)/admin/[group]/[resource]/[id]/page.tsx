@@ -18,6 +18,11 @@ import {
  * found, not an empty form.
  */
 
+// The record is read while the page renders, so a navigation into it is
+// allowed to block on the server instead of being validated as an instant
+// navigation.
+export const instant = false;
+
 export async function generateMetadata({
   params,
 }: PageProps<"/portal/admin/[group]/[resource]/[id]">): Promise<Metadata> {

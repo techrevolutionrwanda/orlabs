@@ -11,6 +11,13 @@ import {
  * page itself. The session is read inside a `<Suspense>` boundary so the
  * shell around it can still be prerendered.
  */
+
+// The portal is a request-time area: the navigation reads the address it is
+// shown at and the pages read the record they are about. A navigation into
+// the portal is therefore allowed to block on the server instead of being
+// validated as an instant navigation.
+export const instant = false;
+
 export default function WorkspaceLayout({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-full flex-1 flex-col lg:flex-row">

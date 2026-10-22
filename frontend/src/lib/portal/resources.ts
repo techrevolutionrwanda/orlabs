@@ -58,6 +58,22 @@ export const portalGroups: GroupDef[] = [
   },
 ];
 
+/**
+ * The pictures the navigation uses.
+ *
+ * Every kind of record has one, so the navigation is written once and a new
+ * kind of record finds its place in it without touching a screen.
+ */
+export type ResourceIcon =
+  | "grid"
+  | "folder"
+  | "document"
+  | "users"
+  | "check"
+  | "ticket"
+  | "image"
+  | "link";
+
 /** The kinds of field a form can hold. */
 export type FieldKind =
   | "text"
@@ -114,7 +130,7 @@ export type ResourceDef = {
   orderable: boolean;
   /** The cache tag the public pages read this collection under. */
   tag: string;
-  icon: string;
+  icon: ResourceIcon;
 };
 
 const publishOptions = [
