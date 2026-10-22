@@ -633,6 +633,41 @@ export function isResourceKey(value: string): value is ResourceKey {
   return (resourceKeys as readonly string[]).includes(value);
 }
 
+/**
+ * The empty record of a resource.
+ *
+ * A record always carries every field of its kind, even when it is not
+ * filled in yet. Nothing further down has to guard against a missing field,
+ * and a record that was written before a field was added still fits.
+ */
+export function emptyRecord(
+  definition: ResourceDef,
+): Record<string, unknown> {
+  const values: Record<string, unknown> = {};
+
+  for (const field of definition.fields) {
+    switch (field.kind) {
+      case "number":
+        values[field.name] = 0;
+        break;
+
+      case "select":
+        values[field.name] = field.options?.[0]?.value ?? "";
+        break;
+
+      case "tags":
+      case "paragraphs":
+        values[field.name] = [];
+        break;
+
+      default:
+        values[field.name] = "";
+    }
+  }
+
+  return values;
+}
+
 /** The collection a slug points at. */
 export function resourceKeyFromSlug(slug: string): ResourceKey | null {
   for (const key of resourceKeys) {

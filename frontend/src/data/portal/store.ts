@@ -1,5 +1,6 @@
 import { enqueueWrite, readPortalData, writePortalData } from "@/src/lib/portal/db";
 import {
+  emptyRecord,
   isResourceKey,
   resources,
   type ResourceKey,
@@ -99,6 +100,7 @@ export async function createRecord(
     const definition = resources[key];
 
     const record: AnyRecord = {
+      ...emptyRecord(definition),
       ...values,
       id: nextId(collection, definition.prefix),
     };
@@ -129,9 +131,16 @@ export async function updateRecord(
   return enqueueWrite(async () => {
     const data = await readPortalData();
     const collection = data[key] as AnyRecord[];
+    const definition = resources[key];
     const record = collection.find((entry) => entry.id === id);
 
     if (!record) return null;
+
+    // A field that was added after the record was written is filled in, so
+    // the record keeps the shape of its kind.
+    for (const [name, value] of Object.entries(emptyRecord(definition))) {
+      if (record[name] === undefined) record[name] = value;
+    }
 
     for (const [name, value] of Object.entries(values)) {
       if (name === "id") continue;
@@ -195,7 +204,7 @@ export function findDependants(
     }
 
     for (const project of data.projects) {
-      if (project.team.includes(id)) {
+      if (project.team?.includes(id)) {
         dependants.push({ type: "project", id: project.id, label: project.name });
       }
     }
