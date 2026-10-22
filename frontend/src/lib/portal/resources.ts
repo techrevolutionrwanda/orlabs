@@ -685,6 +685,32 @@ export function cmsPath(key: ResourceKey, id?: string): string {
   return id ? `${base}/${id}` : base;
 }
 
+/** Where the records of a resource come from. */
+export function apiPath(key: ResourceKey): string {
+  return `/api/portal/${resourceSlugs[key]}`;
+}
+
+/**
+ * The resource a pair of address parts points at.
+ *
+ * The group has to match as well: `/portal/admin/website/projects` is not a
+ * screen, because the projects belong to the delivery group.
+ */
+export function resourceFromPath(
+  group: string,
+  slug: string,
+): ResourceDef | null {
+  for (const key of resourceKeys) {
+    const definition = resources[key];
+
+    if (definition.group === group && resourceSlugs[key] === slug) {
+      return definition;
+    }
+  }
+
+  return null;
+}
+
 export function resourcesInGroup(group: PortalGroup): ResourceDef[] {
   return resourceKeys
     .map((key) => resources[key])
