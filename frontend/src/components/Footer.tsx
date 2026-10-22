@@ -74,24 +74,18 @@ export default function Footer() {
               Contact
             </h2>
             <ul className="m-0 grid list-none gap-2.5 p-0 text-[0.9375rem]">
-              <li>[Street address], Kigali, Rwanda</li>
-              <li>
-                <a
-                  href="mailto:[EMAIL]"
-                  className="text-on-navy-muted no-underline hover:text-gold"
-                >
-                  [EMAIL]
-                </a>
-              </li>
-              <li>[PHONE / WHATSAPP]</li>
+              <li>123 Tech Street, Kigali, Rwanda</li>
+              <li>orlabstech@gmail.com</li>
+              <li>+250 792 778 698</li>
             </ul>
           </div>
         </div>
 
         <div className="mt-10 flex flex-wrap justify-between gap-3 border-t border-[#1C3352] pt-6 text-[0.8125rem] text-[#9AA8BA]">
           <span>
-            © <CopyrightYear /> OrLabs Tech Industries Ltd · [RDB
+            &copy; <CopyrightYear /> OrLabs Tech Industries Ltd · [RDB
             registration no.]
+
           </span>
           <span>Rooted in Rwanda. Built for Africa.</span>
         </div>
