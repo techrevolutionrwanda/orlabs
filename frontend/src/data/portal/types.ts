@@ -42,6 +42,8 @@ export type PortalProject = {
   name: string;
   client: string;
   summary: string;
+  /** The picture of the project — an address, or empty when there is none. */
+  imageUrl: string;
   status: ProjectStatus;
   progress: number;
   stack: string[];

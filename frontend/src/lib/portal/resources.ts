@@ -153,6 +153,12 @@ export const resources: Record<ResourceKey, ResourceDef> = {
       { name: "client", label: "Client", kind: "text", required: true },
       { name: "summary", label: "One-line summary", kind: "textarea", required: true },
       {
+        name: "imageUrl",
+        label: "Project picture",
+        kind: "image",
+        help: "The address of the picture (https://…). The website shows a placeholder while there is none.",
+      },
+      {
         name: "status",
         label: "Status",
         kind: "select",

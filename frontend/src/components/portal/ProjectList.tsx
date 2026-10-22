@@ -1,6 +1,7 @@
 "use client";
 
 import { ProgressBar } from "@/src/components/motion/ProgressBar";
+import { Picture } from "@/src/components/site/Picture";
 import { StatusChip } from "./StatusChip";
 import type { PortalProject } from "@/src/data/portal/types";
 
@@ -25,6 +26,18 @@ export function ProjectList({ projects }: { projects: PortalProject[] }) {
             </div>
             <StatusChip value={project.status} />
           </div>
+
+          {project.imageUrl ? (
+            // The picture of the project, when the record carries one. A
+            // record without a picture simply shows none.
+            <Picture
+              src={project.imageUrl}
+              alt={project.name}
+              placeholder="No picture yet"
+              className="aspect-[16/9] w-full"
+              sizes="(min-width: 1024px) 40vw, 100vw"
+            />
+          ) : null}
 
           <p className="text-[0.9375rem] text-ink-muted">{project.summary}</p>
 

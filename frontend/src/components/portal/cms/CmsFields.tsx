@@ -221,9 +221,11 @@ function CmsField({
       ) : null}
 
       {error ? (
-        <p id={`${id}-error`}>
+        // A block of its own, not a paragraph: the message below is already
+        // a paragraph, and a paragraph may not sit inside another one.
+        <div id={`${id}-error`}>
           <CmsFieldError message={error} />
-        </p>
+        </div>
       ) : null}
     </div>
   );
