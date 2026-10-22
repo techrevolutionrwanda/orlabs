@@ -4,31 +4,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { Logo } from "@/src/components/site/Logo";
+import { cmsPath, portalGroups, resourcesInGroup } from "@/src/lib/portal/resources";
 
 type NavItem = {
   label: string;
   href: string;
-  icon: "grid" | "folder" | "document" | "users" | "check" | "ticket";
-};
-
-const areas: Record<string, { title: string; items: NavItem[] }> = {
-  admin: {
-    title: "Administration",
-    items: [
-      { label: "Overview", href: "/portal/admin", icon: "grid" },
-      { label: "Projects", href: "/portal/admin/projects", icon: "folder" },
-      { label: "Content", href: "/portal/admin/content", icon: "document" },
-      { label: "Team", href: "/portal/admin/team", icon: "users" },
-    ],
-  },
-  worker: {
-    title: "Worker area",
-    items: [
-      { label: "Overview", href: "/portal/worker", icon: "grid" },
-      { label: "My tasks", href: "/portal/worker/tasks", icon: "check" },
-      { label: "Tickets", href: "/portal/worker/tickets", icon: "ticket" },
-    ],
-  },
+  icon: "grid" | "folder" | "document" | "users" | "check" | "ticket" | "image" | "link";
 };
 
 const paths: Record<NavItem["icon"], string> = {
@@ -42,6 +23,10 @@ const paths: Record<NavItem["icon"], string> = {
   check: "M4 12.5 9 17.5 20 6.5",
   ticket:
     "M4 7h16v3a2 2 0 0 0 0 4v3H4v-3a2 2 0 0 0 0-4V7Zm8 0v10",
+  image:
+    "M4 5h16v14H4V5Zm3 8 4-4 5 6H7l3-4Zm12-4a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z",
+  link:
+    "M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71",
 };
 
 function NavIcon({ icon }: { icon: NavItem["icon"] }) {
