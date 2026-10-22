@@ -118,7 +118,13 @@ const projects: PortalProject[] = [
   },
 ];
 
-const tasks: PortalTask[] = [
+/**
+ * A task as it is kept in the store — the project and the person are still
+ * only ids. The names are resolved when the task is handed out.
+ */
+type StoredTask = Omit<PortalTask, "projectName" | "assigneeName">;
+
+const tasks: StoredTask[] = [
   {
     id: "tsk-001",
     title: "Wire the authentication flow end to end",
@@ -328,7 +334,21 @@ export function listProjects(): PortalProject[] {
 }
 
 export function listTasks(): PortalTask[] {
-  return tasks.map((task) => ({ ...task }));
+  return tasks.map((task) => ({
+    ...task,
+    projectName: projectName(task.project),
+    assigneeName: assigneeName(task.assignee),
+  }));
+}
+
+function projectName(id: string): string {
+  const project = projects.find((entry) => entry.id === id);
+  return project ? project.name : id;
+}
+
+function assigneeName(id: string): string {
+  const member = team.find((entry) => entry.id === id);
+  return member ? member.name : id;
 }
 
 export function listTickets(): PortalTicket[] {
@@ -361,7 +381,12 @@ export function updateTaskStatus(
   if (!task) return null;
 
   task.status = status;
-  return { ...task };
+
+  return {
+    ...task,
+    projectName: projectName(task.project),
+    assigneeName: assigneeName(task.assignee),
+  };
 }
 
 export function updateTicketStatus(
@@ -487,11 +512,11 @@ export function portalSummary(
   };
 }
 
-function projectsOf(list: PortalTask[]): string[] {
+function projectsOf(list: StoredTask[]): string[] {
   return [...new Set(list.map((task) => task.project))];
 }
 
-function nextDueDate(list: PortalTask[]): string {
+function nextDueDate(list: StoredTask[]): string {
   const dates = list.map((task) => task.dueDate).sort();
   return dates[0] ?? "—";
 }

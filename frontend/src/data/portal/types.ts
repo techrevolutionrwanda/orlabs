@@ -39,7 +39,9 @@ export type PortalTask = {
   id: string;
   title: string;
   project: string;
+  projectName: string;
   assignee: string;
+  assigneeName: string;
   status: TaskStatus;
   priority: Priority;
   dueDate: string;

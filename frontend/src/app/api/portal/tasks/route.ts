@@ -4,11 +4,11 @@ import { requirePortalSession } from "@/src/lib/portal/api";
 /**
  * GET /api/portal/tasks — the task list.
  *
- * `?assignee=tm-002` narrows it down to one person, `?status=todo` to one
- * state.
+ * `?mine=1` narrows it down to the person who is signed in,
+ * `?assignee=tm-002` to one person, `?status=todo` to one state.
  */
 export async function GET(request: Request) {
-  const { response } = await requirePortalSession();
+  const { session, response } = await requirePortalSession();
 
   if (response) return response;
 
@@ -17,6 +17,10 @@ export async function GET(request: Request) {
   const status = params.get("status");
 
   let tasks = listTasks();
+
+  if (params.get("mine") === "1") {
+    tasks = tasks.filter((task) => task.assignee === session.userId);
+  }
 
   if (assignee) {
     tasks = tasks.filter((task) => task.assignee === assignee);
