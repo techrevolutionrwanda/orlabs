@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
-import { PortalError, PortalSkeleton } from "@/src/components/portal/PortalResource";
 import {
   cmsPath,
   resourceSlugs,
@@ -14,7 +13,7 @@ import {
 import { CmsDeleteButton } from "./CmsDeleteButton";
 import { CmsError, CmsNotice } from "./CmsFeedback";
 import { CmsFields } from "./CmsFields";
-import { useCmsRecord, useCmsSources, type CmsRow } from "./useCms";
+import { useCmsSources, type CmsRow } from "./useCms";
 import { toApiValues, toFormValues } from "./values";
 
 /**
@@ -26,26 +25,21 @@ import { toApiValues, toFormValues } from "./values";
  */
 export function CmsRecord({
   definition,
-  id,
+  record,
 }: {
   definition: ResourceDef;
-  id?: string;
+  record: CmsRow | null;
 }) {
   const slug = resourceSlugs[definition.key];
-  const { status, row, error } = useCmsRecord(slug, id ?? "");
-
-  if (status === "loading") return <PortalSkeleton rows={5} />;
-
-  if (status === "error") return <PortalError message={error} />;
 
   // The form starts from the record it is about. The key makes sure it
   // starts again when another record is opened.
   return (
     <CmsForm
-      key={row?.id ?? "new"}
+      key={record?.id ?? "new"}
       definition={definition}
       slug={slug}
-      record={row}
+      record={record}
     />
   );
 }
