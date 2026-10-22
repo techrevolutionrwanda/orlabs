@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import trustedByRoutes from "./routes/trustedBy.route.js";
 import workRoutes from "./routes/work.routes.js";
+import founderRoutes from "./routes/founder.routes.js";
 
 let app = express();
 dotenv.config();
@@ -21,6 +22,7 @@ app.get("/", (req: Request, res: Response) => {
 //routes
 app.use("/trusted-by", trustedByRoutes);
 app.use("/work", workRoutes);
+app.use("/founders", founderRoutes);
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
