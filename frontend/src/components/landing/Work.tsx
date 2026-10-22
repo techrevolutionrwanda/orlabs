@@ -2,7 +2,10 @@ export function Work() {
   return (
     <section className="section" id="work">
       <div className="container-page grid gap-6 lg:grid-cols-[2fr_1fr]">
-        <article className="grid content-start gap-4 rounded-[20px] border border-border bg-surface p-9">
+        <article
+          data-reveal
+          className="motion-lift grid content-start gap-4 rounded-[20px] border border-border bg-surface p-9"
+        >
           <p className="eyebrow">Case study</p>
           <div className="flex aspect-[16/7] items-center justify-center rounded-[14px] border border-dashed border-[#c3cad5] text-sm text-ink-subtle">
             [PROJECT SCREENSHOT]
@@ -15,7 +18,11 @@ export function Work() {
           </p>
         </article>
 
-        <figure className="m-0 flex flex-col justify-between gap-6 rounded-[20px] bg-gold p-9 text-navy">
+        <figure
+          data-reveal
+          style={{ "--reveal-delay": "120ms" } as React.CSSProperties}
+          className="m-0 flex flex-col justify-between gap-6 rounded-[20px] bg-gold p-9 text-navy"
+        >
           <svg
             viewBox="0 0 24 24"
             width="36"

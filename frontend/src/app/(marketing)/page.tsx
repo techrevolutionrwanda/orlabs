@@ -6,10 +6,12 @@ import { Process } from "@/src/components/landing/Process";
 import { Services } from "@/src/components/landing/Services";
 import { WhyOrLabs } from "@/src/components/landing/WhyOrLabs";
 import { Work } from "@/src/components/landing/Work";
+import { RevealController } from "@/src/components/site/RevealController";
 
 export default function HomePage() {
   return (
     <main className="flex-1" id="main">
+      <RevealController />
       <Hero />
       <Clients />
       <Services />

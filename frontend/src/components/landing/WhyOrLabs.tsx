@@ -21,7 +21,7 @@ export function WhyOrLabs() {
   return (
     <section className="section bg-navy" id="about">
       <div className="container-page grid gap-9 lg:grid-cols-[1fr_1.1fr] lg:gap-14">
-        <div>
+        <div data-reveal>
           <p className="text-[0.8125rem] font-semibold uppercase tracking-[0.16em] text-gold">
             Why OrLabs
           </p>
@@ -34,15 +34,18 @@ export function WhyOrLabs() {
             vendors.
           </p>
           <a className="link-arrow text-gold" href="#about">
-            Read our story →
+            Read our story <span className="motion-arrow" aria-hidden="true">→</span>
           </a>
         </div>
 
-        <ul className="grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2">
+        <ul
+          data-reveal-group
+          className="grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2"
+        >
           {values.map((value) => (
             <li
               key={value.title}
-              className="grid content-start gap-2 rounded-2xl border border-navy-line p-[22px]"
+              className="motion-lift motion-lift-dark grid content-start gap-2 rounded-2xl border border-navy-line p-[22px]"
             >
               <span className="font-display text-lg font-semibold text-gold">
                 {value.title}

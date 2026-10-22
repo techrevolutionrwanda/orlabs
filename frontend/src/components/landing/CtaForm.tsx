@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { submitContactForm } from "@/src/lib/contact";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -11,45 +12,21 @@ export function CtaForm() {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
-    const data = new FormData(form);
-
-    // Honeypot — real people never fill this in.
-    if (data.get("company_website")) {
-      setStatus("success");
-      setMessage("Thanks — we'll reply within one working day.");
-      form.reset();
-      return;
-    }
-
-    const endpoint = process.env.NEXT_PUBLIC_FORM_ENDPOINT;
-
-    if (!endpoint) {
-      setStatus("error");
-      setMessage(
-        "The contact form isn't connected yet. Set NEXT_PUBLIC_FORM_ENDPOINT to enable submissions.",
-      );
-      return;
-    }
 
     setStatus("submitting");
     setMessage("");
 
-    try {
-      const response = await fetch(endpoint, {
-        method: "POST",
-        headers: { Accept: "application/json" },
-        body: data,
-      });
+    const result = await submitContactForm(form);
 
-      if (!response.ok) throw new Error("Request failed");
-
+    if (result.ok) {
       setStatus("success");
       setMessage("Thanks — we'll reply within one working day.");
       form.reset();
-    } catch {
-      setStatus("error");
-      setMessage("Something went wrong. Please try again, or email us at [EMAIL].");
+      return;
     }
+
+    setStatus("error");
+    setMessage(result.message);
   }
 
   return (
@@ -75,7 +52,14 @@ export function CtaForm() {
           type="submit"
           disabled={status === "submitting"}
         >
-          {status === "submitting" ? "Sending…" : "Start a project"}
+          {status === "submitting" ? (
+            <>
+              <span className="spinner" aria-hidden="true" />
+              <span className="ml-2.5">Sending…</span>
+            </>
+          ) : (
+            "Start a project"
+          )}
         </button>
       </div>
 
@@ -93,7 +77,7 @@ export function CtaForm() {
       <p
         className={`mt-3 min-h-5 text-sm ${
           status === "success" ? "text-gold" : "text-white"
-        }`}
+        } ${message ? "status-in" : ""}`}
         role="status"
         aria-live="polite"
       >
