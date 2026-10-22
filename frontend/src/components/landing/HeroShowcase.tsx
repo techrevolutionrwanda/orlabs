@@ -25,6 +25,9 @@ export function HeroShowcase() {
         <div className="device-float-tablet rounded-[10px] border border-[#2b4e7c] bg-[#0f2a4c] p-[3%] shadow-[0_20px_45px_rgba(0,0,0,0.35)]">
           <div className="relative aspect-[3/4] overflow-hidden rounded-[6px] bg-bg ring-1 ring-black/30">
             <MiniSite variant="tablet" />
+            <span aria-hidden="true" className="screen-glare">
+              <span className="screen-glare-sweep" />
+            </span>
           </div>
           <span
             aria-hidden="true"
@@ -38,6 +41,9 @@ export function HeroShowcase() {
         <div className="device-float rounded-t-[14px] border border-[#2b4e7c] bg-[#0f2a4c] p-[2.2%] shadow-[0_30px_60px_rgba(0,0,0,0.45)]">
           <div className="relative aspect-[16/10] overflow-hidden rounded-[6px] bg-bg ring-1 ring-black/40">
             <MiniSite variant="desktop" />
+            <span aria-hidden="true" className="screen-glare">
+              <span className="screen-glare-sweep" />
+            </span>
             <span
               aria-hidden="true"
               className="pointer-events-none absolute inset-0 rounded-[6px] ring-1 ring-inset ring-white/10"

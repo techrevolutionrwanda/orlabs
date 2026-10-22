@@ -156,6 +156,39 @@
   animation: float-y 5.5s ease-in-out infinite;
 }
 
+/* Soft light sweep across the device screens. */
+@keyframes screen-glare {
+  0%,
+  64% {
+    transform: translateX(-140%);
+  }
+  94%,
+  100% {
+    transform: translateX(140%);
+  }
+}
+
+.screen-glare {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.screen-glare-sweep {
+  position: absolute;
+  inset: -30% -60%;
+  background: linear-gradient(
+    100deg,
+    transparent 42%,
+    rgb(255 255 255 / 6%) 48%,
+    rgb(255 255 255 / 16%) 50%,
+    rgb(255 255 255 / 6%) 52%,
+    transparent 58%
+  );
+  animation: screen-glare 11s ease-in-out infinite;
+}
+
 /*
   Each mini page scrolls to exactly its own bottom: the end transform is the
   content height (100%) minus the screen height in container units.
@@ -305,6 +338,7 @@
   .screen-scroll,
   .screen-scroll-tablet,
   .screen-scroll-phone,
+  .screen-glare-sweep,
   .orbit-spin,
   .dot-pulse,
   .toast-cycle,
