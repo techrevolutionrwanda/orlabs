@@ -326,15 +326,52 @@ const content: ContentEntry[] = [
 ];
 
 /* -------------------------------------------------------------------------- */
+/* The store itself                                                            */
+/* -------------------------------------------------------------------------- */
+
+type PortalStore = {
+  projects: PortalProject[];
+  tasks: StoredTask[];
+  tickets: PortalTicket[];
+  team: TeamMember[];
+  content: ContentEntry[];
+};
+
+/**
+ * The one store every route handler works with.
+ *
+ * It is kept on `globalThis` on purpose: in development every route handler
+ * is compiled on its own, so a plain module variable would give each of them
+ * its own copy — a task moved in one route would be invisible in the next.
+ * The first copy wins and everybody shares it.
+ *
+ * The store lives in the memory of the server process. It is emptied when
+ * the server restarts — that is what a mock is.
+ */
+const globalScope = globalThis as typeof globalThis & {
+  __orlabsPortalStore?: PortalStore;
+};
+
+const store: PortalStore =
+  globalScope.__orlabsPortalStore ??
+  (globalScope.__orlabsPortalStore = {
+    projects,
+    tasks,
+    tickets,
+    team,
+    content,
+  });
+
+/* -------------------------------------------------------------------------- */
 /* Reads                                                                       */
 /* -------------------------------------------------------------------------- */
 
 export function listProjects(): PortalProject[] {
-  return projects.map((project) => ({ ...project }));
+  return store.projects.map((project) => ({ ...project }));
 }
 
 export function listTasks(): PortalTask[] {
-  return tasks.map((task) => ({
+  return store.tasks.map((task) => ({
     ...task,
     projectName: projectName(task.project),
     assigneeName: assigneeName(task.assignee),
@@ -342,29 +379,29 @@ export function listTasks(): PortalTask[] {
 }
 
 function projectName(id: string): string {
-  const project = projects.find((entry) => entry.id === id);
+  const project = store.projects.find((entry) => entry.id === id);
   return project ? project.name : id;
 }
 
 function assigneeName(id: string): string {
-  const member = team.find((entry) => entry.id === id);
+  const member = store.team.find((entry) => entry.id === id);
   return member ? member.name : id;
 }
 
 export function listTickets(): PortalTicket[] {
-  return tickets.map((ticket) => ({ ...ticket }));
+  return store.tickets.map((ticket) => ({ ...ticket }));
 }
 
 export function listTeam(): TeamMember[] {
-  return team.map((member) => ({ ...member }));
+  return store.team.map((member) => ({ ...member }));
 }
 
 export function listContent(): ContentEntry[] {
-  return content.map((entry) => ({ ...entry }));
+  return store.content.map((entry) => ({ ...entry }));
 }
 
 export function findTeamMember(id: string): TeamMember | undefined {
-  const member = team.find((entry) => entry.id === id);
+  const member = store.team.find((entry) => entry.id === id);
   return member ? { ...member } : undefined;
 }
 
@@ -376,7 +413,7 @@ export function updateTaskStatus(
   id: string,
   status: TaskStatus,
 ): PortalTask | null {
-  const task = tasks.find((entry) => entry.id === id);
+  const task = store.tasks.find((entry) => entry.id === id);
 
   if (!task) return null;
 
@@ -393,7 +430,7 @@ export function updateTicketStatus(
   id: string,
   status: TicketStatus,
 ): PortalTicket | null {
-  const ticket = tickets.find((entry) => entry.id === id);
+  const ticket = store.tickets.find((entry) => entry.id === id);
 
   if (!ticket) return null;
 
@@ -414,12 +451,16 @@ export function portalSummary(
   userId: string,
 ): PortalSummary {
   if (role === "admin") {
-    const live = projects.filter((project) => project.status === "live");
-    const running = projects.filter(
+    const live = store.projects.filter((project) => project.status === "live");
+    const running = store.projects.filter(
       (project) => project.status === "building" || project.status === "review",
     );
-    const openTickets = tickets.filter((ticket) => ticket.status !== "resolved");
-    const pendingContent = content.filter((entry) => entry.state !== "published");
+    const openTickets = store.tickets.filter(
+      (ticket) => ticket.status !== "resolved",
+    );
+    const pendingContent = store.content.filter(
+      (entry) => entry.state !== "published",
+    );
     const averageProgress =
       running.length === 0
         ? 0
@@ -458,10 +499,10 @@ export function portalSummary(
       ],
       highlights: [
         { label: "Average progress", value: `${averageProgress}%` },
-        { label: "People on the team", value: String(team.length) },
+        { label: "People on the team", value: String(store.team.length) },
         {
           label: "Next release",
-          value: projects
+          value: store.projects
             .filter((project) => project.status !== "live")
             .map((project) => project.targetDate)
             .sort()[0] ?? "—",
@@ -470,11 +511,11 @@ export function portalSummary(
     };
   }
 
-  const mine = tasks.filter((task) => task.assignee === userId);
+  const mine = store.tasks.filter((task) => task.assignee === userId);
   const open = mine.filter((task) => task.status !== "done");
   const done = mine.filter((task) => task.status === "done");
   const highPriority = open.filter((task) => task.priority === "high");
-  const myTickets = tickets.filter((ticket) => ticket.status !== "resolved");
+  const myTickets = store.tickets.filter((ticket) => ticket.status !== "resolved");
 
   return {
     role,
