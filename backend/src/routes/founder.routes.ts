@@ -1,4 +1,5 @@
 import express from "express";
+import { requireAdmin } from "../controllers/auth.controller.js";
 import {
     createFounder,
     deleteFounderById,
@@ -9,6 +10,7 @@ import {
 
 const router = express.Router();
 
+router.use(requireAdmin);
 router.post("/", createFounder);
 router.get("/", getAllFounders);
 router.get("/:id", getFounderById);

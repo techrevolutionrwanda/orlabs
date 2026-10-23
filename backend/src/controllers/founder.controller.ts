@@ -16,12 +16,12 @@ const requiredFields = [
     "jobTitle",
     "location",
     "withUsSince",
-    "imageUrl"
 ] as const;
 
 const allowedFields = new Set([
     ...requiredFields,
     "status",
+    "imageUrl",
 ]);
 
 type FounderInput = {
@@ -60,7 +60,6 @@ function parseFounderInput(
         "phone",
         "jobTitle",
         "location",
-        "imageUrl"
     ] as const) {
         const value = input[field];
         if (value === undefined) continue;
@@ -68,6 +67,13 @@ function parseFounderInput(
             return { error: `${field} must be a non-empty string` };
         }
         data[field] = value.trim();
+    }
+
+    if (input.imageUrl !== undefined) {
+        if (typeof input.imageUrl !== "string") {
+            return { error: "imageUrl must be a string" };
+        }
+        data.imageUrl = input.imageUrl.trim();
     }
 
     if (input.status !== undefined) {
