@@ -4,6 +4,7 @@ import { CtaBand } from "@/src/components/site/CtaBand";
 import { PageHero } from "@/src/components/site/PageHero";
 import { SectionHead } from "@/src/components/site/SectionHead";
 import { RevealController } from "@/src/components/site/RevealController";
+import { LabsProjects } from "@/src/components/site/LabsProjects";
 import { labPosts } from "@/src/content/labs";
 
 export const metadata: Metadata = {
@@ -21,6 +22,8 @@ export default function LabsPage() {
         title="Experiments, notes and things we learned."
         lead="Labs is where we try ideas in the open — small experiments, engineering notes and insights from the team in Kigali."
       />
+
+      <LabsProjects />
 
       <section className="section">
         <div className="container-page">
