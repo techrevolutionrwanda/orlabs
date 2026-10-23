@@ -1,49 +1,58 @@
-export type FormResult =
-  | { ok: true }
-  | { ok: false; message: string };
 
-/**
- * Shared submit logic for the contact forms.
- *
- * The endpoint is configured with `NEXT_PUBLIC_FORM_ENDPOINT`. Until it is set
- * the form reports that it is not connected yet — it never pretends to have
- * sent something.
- */
-export async function submitContactForm(
-  form: HTMLFormElement,
-): Promise<FormResult> {
-  const data = new FormData(form);
-
-  // Honeypot — real people never fill this in.
-  if (data.get("company_website")) {
-    return { ok: true };
-  }
-
+export async function submitContactForm(form: HTMLFormElement) {
+  const accessKey = process.env.NEXT_PUBLIC_FORM_ACCESS_KEY;
   const endpoint = process.env.NEXT_PUBLIC_FORM_ENDPOINT;
 
-  if (!endpoint) {
+  if (!endpoint || !accessKey) {
     return {
       ok: false,
-      message:
-        "The contact form isn't connected yet. Set NEXT_PUBLIC_FORM_ENDPOINT to enable submissions.",
+      message: "The contact form is not configured yet.",
     };
   }
+
+  if (!/^https:\/\/api\.web3forms\.com\/submit$/.test(endpoint)) {
+    return {
+      ok: false,
+      message: "The contact form endpoint is invalid.",
+    };
+  }
+
+  const formData = new FormData(form);
+
+  // Prevent bots from submitting the hidden honeypot field.
+  if (formData.get("company_website")) {
+    return { ok: true, message: "" };
+  }
+
+  formData.set("access_key", accessKey);
+  formData.set("subject", "New project inquiry");
+  formData.set("from_name", "Website Contact Form");
 
   try {
     const response = await fetch(endpoint, {
       method: "POST",
-      headers: { Accept: "application/json" },
-      body: data,
+      headers: {
+        Accept: "application/json",
+      },
+      body: formData,
     });
 
-    if (!response.ok) throw new Error("Request failed");
+    const result = await response.json();
 
-    return { ok: true };
+    if (!response.ok || result.success !== true) {
+      return {
+        ok: false,
+        message:
+          "We couldn't send your request. Please try again.",
+      };
+    }
+
+    return { ok: true, message: "" };
   } catch {
     return {
       ok: false,
       message:
-        "Something went wrong. Please try again, or email us at [EMAIL].",
+        "A network error occurred. Please try again.",
     };
   }
 }
