@@ -1,5 +1,5 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
-import type { Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt";
 import mongoose from "mongoose";
 import User from "../models/user.model.js";
@@ -146,6 +146,23 @@ async function authenticatedAdmin(req: Request) {
     }
 
     return User.findById(session.userId);
+}
+
+export async function requireAdmin(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) {
+    try {
+        const user = await authenticatedAdmin(req);
+        if (!user) {
+            return res.status(401).json({ message: "Authentication required" });
+        }
+        return next();
+    } catch (error) {
+        console.error("Error verifying administrator session:", error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
 }
 
 export async function getCurrentAdmin(req: Request, res: Response) {

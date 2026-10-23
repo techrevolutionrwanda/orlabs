@@ -1,15 +1,18 @@
 import express from 'express';
+import { requireAdmin } from '../controllers/auth.controller.js';
+import {
+  createTrustedBy,
+  deleteTrustedBy,
+  getTrustedBy,
+  updateTrustedBy,
+} from '../controllers/trustedBy.controller.js';
 
 const router = express.Router();
-import createTrustedBy, { getTrustedBy, DeleteTrustedBy } from '../controllers/trustedBy.controller.js';
 
-// Route to create a new TrustedBy entry
-router.post('/', createTrustedBy);
-
-// Route to get all TrustedBy entries
 router.get('/', getTrustedBy);
-
-// Route to delete a TrustedBy entry by ID
-router.delete('/:id', DeleteTrustedBy);
+router.use(requireAdmin);
+router.post('/', createTrustedBy);
+router.put('/:id', updateTrustedBy);
+router.delete('/:id', deleteTrustedBy);
 
 export default router;
