@@ -191,6 +191,27 @@ export async function getAllWorks(req: Request, res: Response) {
     }
 }
 
+export async function getPublicWorks(_req: Request, res: Response) {
+    try {
+        const works = await Work.find(
+            {},
+            {
+                projectName: 1,
+                oneLineSummary: 1,
+                startDate: 1,
+                targetDate: 1,
+                techenologies: 1,
+                client: 1,
+                projectScreenshotUrl: 1,
+            },
+        );
+        return res.status(200).json(works);
+    } catch (error) {
+        console.error("Error fetching public projects:", error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+}
+
 export async function getWorkById(req: Request, res: Response) {
     const { id } = req.params;
     if (!isValidProjectId(id, res)) return;
