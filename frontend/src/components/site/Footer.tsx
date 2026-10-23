@@ -167,8 +167,7 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[#1C3352] py-6 text-[0.8125rem] text-[#9AA8BA]">
           <span>
-            &copy; <CopyrightYear /> OrLabs Tech Industries Ltd &middot; [RDB
-            registration no.]
+            &copy; <CopyrightYear /> OrLabs Tech Industries Ltd &middot; REG-2026-133324
           </span>
           <span className="flex items-center gap-4">
             <span>Rooted in Rwanda. Built for Africa.</span>
