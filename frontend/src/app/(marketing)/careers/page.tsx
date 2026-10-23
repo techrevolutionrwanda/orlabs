@@ -35,29 +35,29 @@ const culture = [
 
 const roles = [
   {
-    title: "[ROLE]",
-    discipline: "[Team or discipline]",
-    location: "Kigali, Rwanda · [Employment type]",
-    summary: "[One-line description of the role.]",
+    title: "UI/UX Designer",
+    discipline: "Design",
+    location: "Kigali, Rwanda · Full-time",
+    summary: "Design and prototype user interfaces for web and mobile applications, working closely with engineers to ensure a seamless user experience.",
   },
   {
-    title: "[ROLE]",
-    discipline: "[Team or discipline]",
-    location: "Kigali, Rwanda · [Employment type]",
-    summary: "[One-line description of the role.]",
+    title: "Software Engineer",
+    discipline: "Engineering",
+    location: "Kigali, Rwanda · Full-time",
+    summary: "Develop and maintain high-quality software solutions, collaborating with cross-functional teams to deliver value to our users.",
   },
   {
-    title: "[ROLE]",
-    discipline: "[Team or discipline]",
-    location: "Kigali, Rwanda · [Employment type]",
-    summary: "[One-line description of the role.]",
+    title: "Product Manager",
+    discipline: "Product",
+    location: "Kigali, Rwanda · Full-time",
+    summary: "Define and drive the product strategy, working closely with engineering and design teams to deliver value to our users.",
   },
 ];
 
 const steps = [
   {
     title: "Send us your CV",
-    body: "Email [EMAIL] with your CV and a short note on the kind of work you want to do.",
+    body: "Email orlabstech@gmail.com with your CV and a short note on the kind of work you want to do.",
   },
   {
     title: "A conversation",
@@ -164,7 +164,7 @@ export default function CareersPage() {
       <CtaBand
         title="Not seeing the right role?"
         body="Send us your CV anyway. We read every one, and the right person often arrives before the job description does."
-        primary={{ label: "Email [EMAIL]", href: "mailto:[EMAIL]" }}
+        primary={{ label: "Email us", href: "mailto:orlabstech@gmail.com" }}
         secondary={{ label: "About OrLabs", href: "/about" }}
       />
     </main>
