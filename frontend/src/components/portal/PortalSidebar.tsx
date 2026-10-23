@@ -8,7 +8,7 @@ import { Logo } from "@/src/components/site/Logo";
 type NavItem = {
   label: string;
   href: string;
-  icon: "grid" | "folder" | "document" | "users" | "check" | "ticket" | "settings" | "trusted";
+  icon: "grid" | "folder" | "document" | "users" | "check" | "ticket" | "settings" | "trusted" | "mail";
 };
 
 const areas: Record<string, { title: string; items: NavItem[] }> = {
@@ -17,6 +17,7 @@ const areas: Record<string, { title: string; items: NavItem[] }> = {
     items: [
       { label: "Overview", href: "/portal/admin", icon: "grid" },
       { label: "Projects", href: "/portal/admin/projects", icon: "folder" },
+      { label: "Contacts", href: "/portal/admin/contacts", icon: "mail" },
       { label: "Content", href: "/portal/admin/content", icon: "document" },
       { label: "Team", href: "/portal/admin/team", icon: "users" },
       { label: "Trusted by", href: "/portal/admin/trusted-by", icon: "trusted" },
@@ -48,6 +49,8 @@ const paths: Record<NavItem["icon"], string> = {
     "M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Zm0-5v2m0 13v2m9-8h-2m-14 0H3m15.36-6.36-1.42 1.42M7.06 16.94l-1.42 1.42m12.72 0-1.42-1.42M7.06 7.06 5.64 5.64",
   trusted:
     "M12 3 20 6v5c0 5-3.4 8.5-8 10-4.6-1.5-8-5-8-10V6l8-3Zm-4 9 2.5 2.5L16.5 8.5",
+  mail:
+    "M3 6h18v12H3V6Zm0 1 9 7 9-7",
 };
 
 function NavIcon({ icon }: { icon: NavItem["icon"] }) {
