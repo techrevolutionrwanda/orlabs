@@ -28,3 +28,20 @@ export async function requirePortalSession(): Promise<PortalRequest> {
 
   return { session, response: null };
 }
+
+export async function requirePortalAdmin(): Promise<PortalRequest> {
+  const result = await requirePortalSession();
+
+  if (result.response) return result;
+  if (result.session.role !== "admin") {
+    return {
+      session: null,
+      response: Response.json(
+        { error: "Administrator access is required." },
+        { status: 403 },
+      ),
+    };
+  }
+
+  return result;
+}
