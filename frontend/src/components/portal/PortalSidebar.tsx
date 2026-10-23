@@ -8,7 +8,7 @@ import { Logo } from "@/src/components/site/Logo";
 type NavItem = {
   label: string;
   href: string;
-  icon: "grid" | "folder" | "document" | "users" | "check" | "ticket";
+  icon: "grid" | "folder" | "document" | "users" | "check" | "ticket" | "settings";
 };
 
 const areas: Record<string, { title: string; items: NavItem[] }> = {
@@ -19,6 +19,7 @@ const areas: Record<string, { title: string; items: NavItem[] }> = {
       { label: "Projects", href: "/portal/admin/projects", icon: "folder" },
       { label: "Content", href: "/portal/admin/content", icon: "document" },
       { label: "Team", href: "/portal/admin/team", icon: "users" },
+      { label: "Account", href: "/portal/admin/account", icon: "settings" },
     ],
   },
   worker: {
@@ -42,6 +43,8 @@ const paths: Record<NavItem["icon"], string> = {
   check: "M4 12.5 9 17.5 20 6.5",
   ticket:
     "M4 7h16v3a2 2 0 0 0 0 4v3H4v-3a2 2 0 0 0 0-4V7Zm8 0v10",
+  settings:
+    "M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Zm0-5v2m0 13v2m9-8h-2m-14 0H3m15.36-6.36-1.42 1.42M7.06 16.94l-1.42 1.42m12.72 0-1.42-1.42M7.06 7.06 5.64 5.64",
 };
 
 function NavIcon({ icon }: { icon: NavItem["icon"] }) {

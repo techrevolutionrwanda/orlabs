@@ -5,10 +5,11 @@ import connectDB from "./config/db.js";
 import trustedByRoutes from "./routes/trustedBy.route.js";
 import workRoutes from "./routes/work.routes.js";
 import founderRoutes from "./routes/founder.routes.js";
+import authRoutes from "./routes/auth.routes.js";
+import { seedAdminAccount } from "./controllers/auth.controller.js";
 
-let app = express();
+const app = express();
 dotenv.config();
-connectDB();
 
 app.use(cors({
   origin: process.env.CORS_ORIGIN || "http://localhost:3000",
@@ -23,8 +24,18 @@ app.get("/", (req: Request, res: Response) => {
 app.use("/trusted-by", trustedByRoutes);
 app.use("/work", workRoutes);
 app.use("/founders", founderRoutes);
+app.use("/auth", authRoutes);
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+async function startServer() {
+  await connectDB();
+  await seedAdminAccount();
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+}
+
+startServer().catch((error: unknown) => {
+  console.error("Failed to start server:", error);
+  process.exit(1);
 });
