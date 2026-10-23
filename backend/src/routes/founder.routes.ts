@@ -5,11 +5,13 @@ import {
     deleteFounderById,
     getAllFounders,
     getFounderById,
+    getPublicFounders,
     updateFounderById,
 } from "../controllers/founder.controller.js";
 
 const router = express.Router();
 
+router.get("/public", getPublicFounders);
 router.use(requireAdmin);
 router.post("/", createFounder);
 router.get("/", getAllFounders);
