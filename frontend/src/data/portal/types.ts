@@ -35,6 +35,20 @@ export type PortalProject = {
   targetDate: string;
 };
 
+export type BackendProject = {
+  _id: string;
+  projectName: string;
+  oneLineSummary: string;
+  startDate: string;
+  targetDate: string;
+  techenologies: string;
+  client: {
+    clientName: string;
+    role: string;
+    companyName: string;
+  };
+};
+
 export type PortalTask = {
   id: string;
   title: string;
