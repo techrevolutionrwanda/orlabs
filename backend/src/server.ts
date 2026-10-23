@@ -3,7 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import trustedByRoutes from "./routes/trustedBy.route.js";
-import workRoutes from "./routes/work.routes.js";
+import workRoutes from "./routes/project.routes.js";
 import founderRoutes from "./routes/founder.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import { seedAdminAccount } from "./controllers/auth.controller.js";

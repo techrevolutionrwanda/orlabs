@@ -1,4 +1,4 @@
-import Work from "../models/work.model.js";
+import Work from "../models/project.model.js";
 import type { Request, Response } from "express";
 
 
