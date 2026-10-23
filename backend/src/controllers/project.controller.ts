@@ -174,9 +174,16 @@ export async function workCreate(req: Request, res: Response) {
     }
 }
 
-export async function getAllWorks(_req: Request, res: Response) {
+export async function getAllWorks(req: Request, res: Response) {
     try {
-        const works = await Work.find();
+        const works = await Work.find(
+            req.query.excludeScreenshotUrl === "true"
+                ? undefined
+                : {},
+            req.query.excludeScreenshotUrl === "true"
+                ? { projectScreenshotUrl: 0 }
+                : undefined,
+        );
         return res.status(200).json(works);
     } catch (error) {
         console.error("Error fetching projects:", error);
