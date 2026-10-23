@@ -30,12 +30,14 @@ const tones: Record<string, string> = {
   available: "bg-chip text-teal-text",
   "partly-booked": "bg-navy-soft text-gold",
   away: "bg-chip text-ink-subtle",
+  "fully-booked": "bg-navy text-white",
 };
 
 const labels: Record<string, string> = {
   "in-progress": "In progress",
   "in-review": "In review",
   "partly-booked": "Partly booked",
+  "fully-booked": "Fully booked",
 };
 
 export function statusLabel(value: string): string {
