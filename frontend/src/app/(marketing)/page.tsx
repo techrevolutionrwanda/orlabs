@@ -6,6 +6,7 @@ import { Process } from "@/src/components/landing/Process";
 import { Services } from "@/src/components/landing/Services";
 import { WhyOrLabs } from "@/src/components/landing/WhyOrLabs";
 import { Work } from "@/src/components/landing/Work";
+import { AboutTeam } from "@/src/components/site/AboutTeam";
 import { RevealController } from "@/src/components/site/RevealController";
 
 export default function HomePage() {
@@ -20,6 +21,7 @@ export default function HomePage() {
       <WhyOrLabs />
       <Work />
       <Cta />
+      <AboutTeam/>
     </main>
   );
 }
