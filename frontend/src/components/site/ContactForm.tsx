@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { submitContactForm } from "@/src/lib/contact";
 import { services } from "@/src/content/services";
 
 type Status = "idle" | "submitting" | "success" | "error";
@@ -20,24 +19,50 @@ export function ContactForm() {
     setStatus("submitting");
     setMessage("");
 
-    const result = await submitContactForm(form);
+    const fields = new FormData(form);
+    const payload = {
+      name: String(fields.get("name") ?? ""),
+      email: String(fields.get("email") ?? ""),
+      company: String(fields.get("company") ?? ""),
+      service: String(fields.get("service") ?? ""),
+      message: String(fields.get("message") ?? ""),
+      company_website: String(fields.get("company_website") ?? ""),
+    };
 
-    if (result.ok) {
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const result: unknown = await response.json().catch(() => null);
+      if (!response.ok) {
+        const errorMessage =
+          typeof result === "object" &&
+          result !== null &&
+          "message" in result &&
+          typeof result.message === "string"
+            ? result.message
+            : "We couldn't send your request. Please try again.";
+        throw new Error(errorMessage);
+      }
+
       setStatus("success");
       setMessage("Thanks — we'll reply within one working day.");
       form.reset();
-      return;
+    } catch (error) {
+      setStatus("error");
+      setMessage(
+        error instanceof Error
+          ? error.message
+          : "A network error occurred. Please try again.",
+      );
     }
-
-    setStatus("error");
-    setMessage(result.message);
   }
 
   return (
     <form
       className="grid gap-5"
-      action="[FORM_ENDPOINT]"
-      method="post"
       onSubmit={handleSubmit}
     >
       <div className="grid gap-5 sm:grid-cols-2">
