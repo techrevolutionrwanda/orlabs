@@ -96,7 +96,7 @@ export function Footer() {
               Tell us what you want to build and we will help you shape it.
             </p>
           </div>
-          <Link className="btn btn-primary" href="/#contact">
+          <Link className="btn btn-primary" href="/contact">
             Book a free consultation
           </Link>
         </div>
