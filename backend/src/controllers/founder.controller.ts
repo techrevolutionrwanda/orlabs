@@ -158,6 +158,19 @@ export async function getAllFounders(_req: Request, res: Response) {
     }
 }
 
+export async function getPublicFounders(_req: Request, res: Response) {
+    try {
+        const founders = await Founder.find(
+            {},
+            { name: 1, jobTitle: 1, imageUrl: 1 },
+        ).sort({ name: 1 });
+        return res.status(200).json(founders);
+    } catch (error) {
+        console.error("Error fetching public founders:", error);
+        return res.status(500).json({ message: "Unable to load team members" });
+    }
+}
+
 export async function getFounderById(req: Request, res: Response) {
     const { id } = req.params;
     if (!mongoose.isValidObjectId(id)) {
