@@ -3,6 +3,7 @@ import { CtaBand } from "@/src/components/site/CtaBand";
 import { PageHero } from "@/src/components/site/PageHero";
 import { SectionHead } from "@/src/components/site/SectionHead";
 import { RevealController } from "@/src/components/site/RevealController";
+import { AboutTeam } from "@/src/components/site/AboutTeam";
 
 export const metadata: Metadata = {
   title: "About OrLabs — Software engineering from Kigali, Rwanda",
@@ -32,8 +33,6 @@ const values = [
     body: "Success is measured by what changes for the people and businesses that rely on the work.",
   },
 ];
-
-const team = ["[Name]", "[Name]", "[Name]", "[Name]"];
 
 export default function AboutPage() {
   return (
@@ -130,38 +129,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="section bg-chip">
-        <div className="container-page">
-          <SectionHead
-            eyebrow="The team"
-            title="Engineers in Kigali."
-            lead="The people behind the work — [TEAM PHOTO], [Name] and [Role] still to be confirmed."
-          />
-
-          <ul
-            data-reveal-group
-            className="grid list-none grid-cols-2 gap-5 p-0 lg:grid-cols-4"
-          >
-            {team.map((name, index) => (
-              <li
-                key={index}
-                className="motion-lift grid content-start gap-3 rounded-card border border-border bg-surface p-5"
-              >
-                <span
-                  aria-hidden="true"
-                  className="grid aspect-[4/3] w-full place-items-center rounded-xl bg-chip text-[0.8125rem] font-semibold uppercase tracking-[0.12em] text-ink-subtle"
-                >
-                  [TEAM PHOTO]
-                </span>
-                <span className="text-[1.0625rem] font-semibold text-navy">
-                  {name}
-                </span>
-                <span className="text-[0.9375rem] text-ink-subtle">[Role]</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
+      <AboutTeam />
 
       <CtaBand />
     </main>
