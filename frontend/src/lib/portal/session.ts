@@ -4,12 +4,11 @@ import {
   decodePortalSession,
   encodePortalSession,
   PORTAL_SESSION_COOKIE,
-  type PortalRole,
   type PortalSession,
 } from "./token";
 
 /**
- * Reads and writes the portal session cookie.
+ * Reads and writes the authenticated portal session cookie.
  *
  * `cookies()` is asynchronous in this version of Next.js, so every helper
  * here is asynchronous too. Anything that reads the session from a page has
@@ -17,26 +16,28 @@ import {
  * prerendered.
  */
 
-export const demoUsers: Record<PortalRole, { userId: string; name: string }> =
-  {
-    admin: { userId: "tm-001", name: "Demo administrator" },
-    worker: { userId: "tm-002", name: "Demo worker" },
-  };
-
 export async function readPortalSession(): Promise<PortalSession | null> {
   const store = await cookies();
 
   return decodePortalSession(store.get(PORTAL_SESSION_COOKIE)?.value);
 }
 
+export async function readPortalSessionToken(): Promise<string | null> {
+  const store = await cookies();
+  return store.get(PORTAL_SESSION_COOKIE)?.value ?? null;
+}
+
 export async function createPortalSession(
-  role: PortalRole,
+  userId: string,
+  name: string,
 ): Promise<PortalSession> {
+  const lifetime = 60 * 60 * 8;
   const session: PortalSession = {
-    role,
-    userId: demoUsers[role].userId,
-    name: demoUsers[role].name,
+    role: "admin",
+    userId,
+    name,
     issuedAt: new Date().toISOString(),
+    expiresAt: Date.now() + lifetime * 1000,
   };
 
   const store = await cookies();
@@ -46,7 +47,7 @@ export async function createPortalSession(
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
     path: "/",
-    maxAge: 60 * 60 * 8,
+    maxAge: lifetime,
   });
 
   return session;

@@ -1,13 +1,6 @@
 /**
- * The portal session token.
- *
- * The session is a signed cookie: a base64url payload and an HMAC signature.
- * Everything here is plain Web Crypto so the same code runs in the Node
- * runtime (route handlers and server actions) and in the proxy (Edge).
- *
- * This is still a placeholder: it proves who the visitor is *within this
- * build*, not who they are in the world. A real deployment replaces the
- * demo sign-in with the identity provider and keeps this format.
+ * Admin portal sessions use a base64url payload signed with HMAC-SHA256.
+ * Web Crypto keeps verification compatible with both Node and the Edge proxy.
  */
 
 export const PORTAL_SESSION_COOKIE = "orlabs_portal_session";
@@ -19,6 +12,7 @@ export type PortalSession = {
   userId: string;
   name: string;
   issuedAt: string;
+  expiresAt: number;
 };
 
 export const roleLabels: Record<PortalRole, string> = {
@@ -31,9 +25,11 @@ export function isPortalRole(value: unknown): value is PortalRole {
 }
 
 function secret(): string {
-  return (
-    process.env.PORTAL_SESSION_SECRET ?? "orlabs-portal-development-secret"
-  );
+  const value = process.env.PORTAL_SESSION_SECRET;
+  if (!value || value.length < 32) {
+    throw new Error("PORTAL_SESSION_SECRET must be set to at least 32 characters");
+  }
+  return value;
 }
 
 function toBase64Url(bytes: Uint8Array): string {
@@ -121,6 +117,9 @@ export async function decodePortalSession(
 
     if (!isPortalRole(parsed.role)) return null;
     if (typeof parsed.userId !== "string") return null;
+    if (typeof parsed.expiresAt !== "number" || parsed.expiresAt <= Date.now()) {
+      return null;
+    }
 
     return {
       role: parsed.role,
@@ -130,6 +129,7 @@ export async function decodePortalSession(
         typeof parsed.issuedAt === "string"
           ? parsed.issuedAt
           : new Date(0).toISOString(),
+      expiresAt: parsed.expiresAt,
     };
   } catch {
     return null;
