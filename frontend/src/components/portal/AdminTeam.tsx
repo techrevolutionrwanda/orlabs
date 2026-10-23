@@ -359,7 +359,7 @@ export function AdminTeam() {
 
                 <div className="mt-1 flex gap-3 border-t border-border pt-4">
                   <button
-                    className="btn btn-ghost"
+                    className="rounded-[10px] border border-border px-4 py-2 text-sm font-medium text-ink transition-colors hover:border-ink disabled:opacity-60"
                     type="button"
                     onClick={() => {
                       setFormError("");
@@ -453,7 +453,7 @@ export function AdminTeam() {
 
               <div className="flex flex-wrap justify-end gap-3 border-t border-border pt-4 sm:col-span-2">
                 <button
-                  className="btn btn-ghost"
+                  className="rounded-[10px] border border-border px-4 py-2 text-sm font-medium text-ink transition-colors hover:border-ink disabled:opacity-60"
                   type="button"
                   disabled={saving}
                   onClick={() => setForm(null)}
