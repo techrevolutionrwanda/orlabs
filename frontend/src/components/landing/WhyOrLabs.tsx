@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const values = [
   {
     title: "Clarity",
@@ -33,9 +35,9 @@ export function WhyOrLabs() {
             built for Africa and ready for the world — we work as partners, not
             vendors.
           </p>
-          <a className="link-arrow text-gold" href="#about">
+          <Link  className="link-arrow text-gold" href="/about">
             Read our story <span className="motion-arrow" aria-hidden="true">→</span>
-          </a>
+          </Link>
         </div>
 
         <ul
