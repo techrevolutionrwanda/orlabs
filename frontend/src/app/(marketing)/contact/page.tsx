@@ -10,11 +10,10 @@ export const metadata: Metadata = {
 };
 
 const mapEmbed =
-  "https://www.openstreetmap.org/export/embed.html?bbox=30.02%2C-1.99%2C30.10%2C-1.90&layer=mapnik&marker=-1.9441%2C30.0619";
+  "https://maps.google.com/maps?q=Norrsken%20House%20Kigali&t=&z=16&ie=UTF8&iwloc=&output=embed";
 
 const mapLink =
-  "https://www.openstreetmap.org/?mlat=-1.9441&mlon=30.0619#map=13/30.0619/-1.9441";
-
+  "https://www.google.com/maps/search/?api=1&query=Norrsken+House+Kigali";
 export default function ContactPage() {
   return (
     <main className="flex-1" id="main">
@@ -40,14 +39,17 @@ export default function ContactPage() {
               <h2 className="text-h3 font-semibold">OrLabs Tech Industries</h2>
               <address className="grid gap-3 text-[0.9375rem] not-italic text-ink-muted">
                 <span>
-                  [Street address]
+                  Kicukiro
+                  <br />
                   <br />
                   Kigali, Rwanda
                 </span>
                 <span>
-                  <span className="font-semibold text-ink">Phone &amp; WhatsApp</span>
+                  <span className="font-semibold text-ink">
+                    Phone &amp; WhatsApp
+                  </span>
                   <br />
-                  [PHONE / WHATSAPP]
+                  +250 792 778 698
                 </span>
                 <span>
                   <span className="font-semibold text-ink">Email</span>
@@ -56,12 +58,12 @@ export default function ContactPage() {
                     href="mailto:[EMAIL]"
                     className="text-teal-text underline decoration-1 underline-offset-4"
                   >
-                    [EMAIL]
+                    orlabstech@gmail.com
                   </a>
                 </span>
               </address>
               <p className="text-[0.875rem] text-ink-subtle">
-                WhatsApp messages are welcome — [PHONE / WHATSAPP] to be
+                WhatsApp messages are welcome — +250 792 778 698 to be
                 confirmed.
               </p>
             </div>
