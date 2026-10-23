@@ -16,6 +16,25 @@ const founderSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    location: {
+        type: String,
+        required: true,
+    },
+    status: {
+        type: String,
+        enum: ['available', 'away', 'partly-booked', 'fully-booked'],
+        default: 'available',
+    },
+    withUsSince: {
+        type: Date,
+        required: true,
+    },
+    imageUrl: {
+        type: String,
+        required: false,
+    },
+
+
 }, {
     timestamps: true,
 });
