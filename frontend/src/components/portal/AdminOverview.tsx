@@ -1,6 +1,6 @@
 "use client";
 
-import type { PortalProject, PortalSummary } from "@/src/data/portal/types";
+import type { BackendProject, PortalSummary } from "@/src/data/portal/types";
 
 import { PortalHighlights, PortalMetrics } from "./PortalMetrics";
 import { PortalResource } from "./PortalResource";
@@ -13,9 +13,7 @@ import { usePortalData } from "./usePortalData";
  */
 export function AdminOverview() {
   const summary = usePortalData<PortalSummary>("/api/portal/summary");
-  const projects = usePortalData<{ projects: PortalProject[] }>(
-    "/api/portal/projects",
-  );
+  const projects = usePortalData<BackendProject[]>("/api/portal/projects");
 
   return (
     <div className="grid gap-10">
@@ -31,17 +29,10 @@ export function AdminOverview() {
       <section>
         <PortalSectionHead
           title="In delivery"
-          lead="The projects that are being built or reviewed right now."
+          lead="Projects currently recorded in the backend."
         />
         <PortalResource state={projects} rows={2}>
-          {(data) => (
-            <ProjectList
-              projects={data.projects.filter(
-                (project) =>
-                  project.status !== "live" && project.status !== "paused",
-              )}
-            />
-          )}
+          {(data) => <ProjectList projects={data} />}
         </PortalResource>
       </section>
     </div>

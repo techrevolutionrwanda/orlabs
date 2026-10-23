@@ -5,7 +5,7 @@ const workSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    description: {
+    oneLineSummary: {
         type: String,
         required: true,
     },
@@ -13,18 +13,31 @@ const workSchema = new mongoose.Schema({
         type: Date,
         required: true,
     },
-    companyName: {
+    targetDate: {
+        type: Date,
+        required: true,
+    },
+  
+   
+    techenologies: {
         type: String,
         required: true,
     },
+    client: {
+ clientName: {
+        type: String,
+        required: true,
+        },
     role: {
         type: String,
         required: true,
-    },
-    clientQuote: {
+        },
+    companyName: {
         type: String,
         required: true,
+        },
     },
+    
     projectScreenshotUrl: {
         type: String,
         required: true,
