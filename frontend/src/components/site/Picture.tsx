@@ -16,6 +16,9 @@ export function Picture({
   className = "",
   placeholderClass = "text-sm",
   sizes = "(min-width: 1024px) 50vw, 100vw",
+  radius = "rounded-[14px]",
+  fit = "contain",
+  imageClassName = "",
 }: {
   src: string;
   alt: string;
@@ -23,6 +26,12 @@ export function Picture({
   className?: string;
   placeholderClass?: string;
   sizes?: string;
+  /** The frame's corner shape — the default is the site's card image radius. */
+  radius?: string;
+  /** `contain` shows the whole picture; `cover` fills the frame (portraits). */
+  fit?: "contain" | "cover";
+  /** Extra classes for the `<Image>` itself, such as a hover zoom. */
+  imageClassName?: string;
 }) {
   const address = src.trim();
   const usable = /^https?:\/\/\S+$/i.test(address) || address.startsWith("/");
@@ -30,7 +39,7 @@ export function Picture({
   if (!usable) {
     return (
       <div
-        className={`flex items-center justify-center rounded-[14px] border border-dashed border-[#c3cad5] text-ink-subtle ${placeholderClass} ${className}`}
+        className={`flex items-center justify-center ${radius} border border-dashed border-[#c3cad5] text-ink-subtle ${placeholderClass} ${className}`}
       >
         {placeholder}
       </div>
@@ -39,14 +48,14 @@ export function Picture({
 
   return (
     <div
-      className={`relative overflow-hidden rounded-[14px] bg-chip ${className}`}
+      className={`relative overflow-hidden ${radius} bg-chip ${className}`}
     >
       <Image
         src={address}
         alt={alt}
         fill
         sizes={sizes}
-        className="object-contain"
+        className={`${fit === "cover" ? "object-cover" : "object-contain"} ${imageClassName}`}
       />
     </div>
   );

@@ -144,28 +144,40 @@ export default async function AboutPage() {
 
           <ul
             data-reveal-group
-            className="grid list-none grid-cols-2 gap-5 p-0 lg:grid-cols-4"
+            className="grid list-none grid-cols-1 gap-5 p-0 sm:grid-cols-2 lg:grid-cols-4"
           >
             {team.map((person) => (
               <li
                 key={person.id}
-                className="motion-lift grid content-start gap-3 rounded-card border border-border bg-surface p-5"
+                className="group motion-lift relative grid content-start justify-items-center gap-4 overflow-hidden rounded-card border border-border bg-surface p-6 text-center"
               >
-                <Picture
-                  src={person.photoUrl}
-                  alt={`A portrait of ${person.name}`}
-                  placeholder="[TEAM PHOTO]"
-                  className="aspect-[4/3] rounded-xl"
-                  sizes="(min-width: 1024px) 25vw, 50vw"
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-x-6 top-0 h-0.5 origin-left scale-x-0 rounded-full bg-gold transition-transform duration-300 ease-out group-hover:scale-x-100"
                 />
-                <span className="text-[1.0625rem] font-semibold text-navy">
-                  {person.name}
-                </span>
-                <span className="text-[0.9375rem] text-ink-subtle">
-                  {person.role}
-                </span>
+                <div className="w-full max-w-[170px] rounded-[50%] bg-surface p-1.5 ring-2 ring-border transition-shadow duration-300 group-hover:ring-gold">
+                  <Picture
+                    src={person.photoUrl}
+                    alt={`A portrait of ${person.name}`}
+                    placeholder="[TEAM PHOTO]"
+                    placeholderClass="px-2 text-center text-[0.6875rem]"
+                    className="aspect-[4/5] w-full"
+                    radius="rounded-[50%]"
+                    fit="cover"
+                    imageClassName="motion-safe:transition-transform motion-safe:duration-500 motion-safe:ease-out motion-safe:group-hover:scale-[1.04]"
+                    sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                  />
+                </div>
+                <div className="grid gap-1">
+                  <span className="text-[1.0625rem] font-semibold text-navy transition-colors duration-300 group-hover:text-teal-text">
+                    {person.name}
+                  </span>
+                  <span className="text-[0.8125rem] font-semibold uppercase tracking-[0.14em] text-teal-text">
+                    {person.role}
+                  </span>
+                </div>
                 {person.bio ? (
-                  <span className="text-[0.9375rem] text-ink-muted">
+                  <span className="line-clamp-3 text-[0.9375rem] leading-[1.6] text-ink-muted">
                     {person.bio}
                   </span>
                 ) : null}
