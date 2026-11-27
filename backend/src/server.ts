@@ -13,9 +13,12 @@ import { seedAdminAccount } from "./controllers/auth.controller.js";
 const app = express();
 dotenv.config();
 
-app.use(cors({
-  origin: process.env.CORS_ORIGIN || "http://localhost:3000",
-}));
+const allowedOrigins = (process.env.CORS_ORIGIN || "http://localhost:3000")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+app.use(cors({ origin: allowedOrigins }));
 app.use(express.json());
 
 app.get("/", (req: Request, res: Response) => {
