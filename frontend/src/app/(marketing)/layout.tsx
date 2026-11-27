@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import ChatWidget from "@/src/components/chatbot/ChatWidget";
+import { ContactDock } from "@/src/components/site/ContactDock";
 import { Footer } from "@/src/components/site/Footer";
 import { Header } from "@/src/components/site/Header";
 
@@ -13,6 +14,7 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
       <Header />
       {children}
       <Footer />
+      <ContactDock />
       <ChatWidget />
     </>
   );
