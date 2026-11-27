@@ -7,6 +7,7 @@ import workRoutes from "./routes/project.routes.js";
 import founderRoutes from "./routes/founder.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import contactRoutes from "./routes/contact.routes.js";
+import chatRoutes from "./routes/chat.routes.js";
 import { seedAdminAccount } from "./controllers/auth.controller.js";
 
 const app = express();
@@ -27,6 +28,7 @@ app.use("/work", workRoutes);
 app.use("/founders", founderRoutes);
 app.use("/auth", authRoutes);
 app.use("/contacts", contactRoutes);
+app.use("/chat", chatRoutes);
 const PORT = process.env.PORT || 5000;
 
 async function startServer() {
