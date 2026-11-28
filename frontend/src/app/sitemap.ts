@@ -3,10 +3,9 @@ import { labPosts } from "@/src/content/labs";
 import { projects } from "@/src/content/projects";
 import { services } from "@/src/content/services";
 
-const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(
-  /\/$/,
-  "",
-);
+const baseUrl = (
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://orlabs.co.rw"
+).replace(/\/$/, "");
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes = [
