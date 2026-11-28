@@ -4,7 +4,7 @@ import { projects } from "@/src/content/projects";
 import { services } from "@/src/content/services";
 
 const baseUrl = (
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://orlabs.co.rw"
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.orlabs.co.rw"
 ).replace(/\/$/, "");
 
 export default function sitemap(): MetadataRoute.Sitemap {
